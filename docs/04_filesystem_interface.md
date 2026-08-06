@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > This document describes the public `Workspace.fs` surface and is kept
-> in step with the code in `@cloudflare/dofs`. A few spots are
+> in step with the code in `@vibe-box/dofs`. A few spots are
 > explicitly flagged where the doc reflects an intended target (true
 > streaming `writeFile`, mount-layer error codes); everything else is
 > what ships today.

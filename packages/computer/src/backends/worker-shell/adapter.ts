@@ -24,7 +24,7 @@ import type {
   WorkspaceStatResult,
   WriteFileContent,
   WriteFileOptions,
-} from "@cloudflare/dofs";
+} from "@vibe-box/dofs";
 
 // The subset of WorkspaceFilesystemStub the adapter consumes.
 // Declared structurally so tests can swap in a fake or a real stub

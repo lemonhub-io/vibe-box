@@ -9,9 +9,9 @@
 
 A minimal example that puts [`@cloudflare/think`][think] behind a
 terminal chat interface. The agent is a Durable Object with a
-[`@cloudflare/computer`][workspace] VFS for a working directory and
+[`@vibe-box/computer`][workspace] VFS for a working directory and
 the shared file and shell tools from
-[`@cloudflare/computer/tools`][tools]. The Workspace has both the
+[`@vibe-box/computer/tools`][tools]. The Workspace has both the
 fast worker shell backend and a container backend, so the same `exec`
 tool can run quick text commands or full Linux userland commands.
 There is no task workflow: you open a terminal, type, and talk to the
@@ -35,7 +35,7 @@ client (npm run chat)                 worker
    │  AgentClient WebSocket              │
    ├────────────────────────────────────▶  Assistant DO (Think)
    │  /agents/assistant/<name>           │    ├── Workers AI model
-   │                                     │    └── @cloudflare/computer VFS
+   │                                     │    └── @vibe-box/computer VFS
    │  ◀───────── streamed reply ─────────┤          ├── worker backend (env.LOADER)
    │                                                └── container backend (computerd)
 ```
@@ -53,7 +53,7 @@ model, a Workspace, and the workspace tools.
 ## Tools
 
 The tools come from `createAITools()` in
-[`@cloudflare/computer/tools`][tools]. This example enables the file
+[`@vibe-box/computer/tools`][tools]. This example enables the file
 tools and opts into `exec` by passing a shell backend description; it
 does not configure the assets publisher, so `publish` is not offered.
 

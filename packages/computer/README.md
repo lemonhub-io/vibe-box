@@ -1,4 +1,4 @@
-# `@cloudflare/computer`
+# `@vibe-box/computer`
 
 A persistent, SQLite-backed virtual filesystem for Durable Objects,
 with pluggable command and code execution. Built for agents that need a
@@ -40,7 +40,7 @@ just the filesystem.
 ## Installation
 
 ```sh
-npm install @cloudflare/computer
+npm install @vibe-box/computer
 ```
 
 Your Worker needs the `nodejs_compat` compatibility flag. The
@@ -49,7 +49,7 @@ worker-shell and worker-javascript backends additionally need the
 own binding requirements — see [Choosing a backend](#choosing-a-backend).
 
 Optional peer dependencies, installed only if you use the matching
-feature: `ai` and `zod` (for `@cloudflare/computer/tools`),
+feature: `ai` and `zod` (for `@vibe-box/computer/tools`),
 `@platformatic/vfs` (for the Node-side VFS provider).
 
 ## Quick start
@@ -58,7 +58,7 @@ The smallest useful thing is a filesystem with no execution backend. Add
 `withWorkspace` to a Durable Object and you have durable files:
 
 ```ts
-import { withWorkspace, getWorkspace } from "@cloudflare/computer";
+import { withWorkspace, getWorkspace } from "@vibe-box/computer";
 import { DurableObject } from "cloudflare:workers";
 
 export class Agent extends withWorkspace(
@@ -98,8 +98,8 @@ worker-shell backend needs no container and no Docker, so it's the
 quickest way to get `exec` working:
 
 ```ts
-import { withWorkspace, getWorkspace } from "@cloudflare/computer";
-import { WorkerShellBackend } from "@cloudflare/computer/backends/worker-shell";
+import { withWorkspace, getWorkspace } from "@vibe-box/computer";
+import { WorkerShellBackend } from "@vibe-box/computer/backends/worker-shell";
 import { DurableObject } from "cloudflare:workers";
 
 export class Agent extends withWorkspace(
@@ -175,7 +175,7 @@ Pre-fill part of the tree from an R2 bucket. Files under the mount point
 are read-only; writes reject with `EROFS`.
 
 ```ts
-import { R2Bucket } from "@cloudflare/computer";
+import { R2Bucket } from "@vibe-box/computer";
 
 new Workspace({
   storage: ctx.storage,
@@ -225,9 +225,9 @@ Alongside `exec`, the runtime exposes `getExec`, `killExec`, and
 
 | Backend | Import | Runs | Needs |
 | --- | --- | --- | --- |
-| **Container** | `@cloudflare/computer/backends/container` | Shell commands in full Linux userland (real binaries, `npm`, `node`, network) | A Cloudflare Container running `computerd` |
-| **Worker shell** | `@cloudflare/computer/backends/worker-shell` | Shell commands via [just-bash](https://github.com/vercel-labs/just-bash) in a Dynamic Worker | A Worker Loader binding; `experimental` flag |
-| **Worker JavaScript** | `@cloudflare/computer/backends/worker-javascript` | ECMAScript modules in a fresh Dynamic Worker | A Worker Loader binding; `experimental` flag |
+| **Container** | `@vibe-box/computer/backends/container` | Shell commands in full Linux userland (real binaries, `npm`, `node`, network) | A Cloudflare Container running `computerd` |
+| **Worker shell** | `@vibe-box/computer/backends/worker-shell` | Shell commands via [just-bash](https://github.com/vercel-labs/just-bash) in a Dynamic Worker | A Worker Loader binding; `experimental` flag |
+| **Worker JavaScript** | `@vibe-box/computer/backends/worker-javascript` | ECMAScript modules in a fresh Dynamic Worker | A Worker Loader binding; `experimental` flag |
 
 - **Container** cold-starts more slowly but gives you a real Linux
   environment. The container owns its own SQLite-backed VFS and this
@@ -252,13 +252,13 @@ to a named one — see [Multiple backends](#multiple-backends).
 
 ## Tools for agents
 
-`@cloudflare/computer/tools` ships AI SDK tools that wrap the Workspace
+`@vibe-box/computer/tools` ships AI SDK tools that wrap the Workspace
 surfaces, ready to hand to `generateText`, `streamText`, or an agent
 framework's `getTools()`. The default set is `read`, `write`, `edit`,
 and `ls`; `exec` and `publish` are added when you configure them.
 
 ```ts
-import { createAITools } from "@cloudflare/computer/tools";
+import { createAITools } from "@vibe-box/computer/tools";
 
 const tools = createAITools({
   workspace,
@@ -283,11 +283,11 @@ command should run, so write them in plain language. See
 [`isomorphic-git`](https://github.com/isomorphic-git/isomorphic-git),
 operating directly on the local SQLite VFS — no backend or shell
 required. Enable it by passing `createGitClient()` from
-`@cloudflare/computer/git`:
+`@vibe-box/computer/git`:
 
 ```ts
-import { Workspace } from "@cloudflare/computer";
-import { createGitClient } from "@cloudflare/computer/git";
+import { Workspace } from "@vibe-box/computer";
+import { createGitClient } from "@vibe-box/computer/git";
 
 const ws = new Workspace({
   storage: ctx.storage,
@@ -312,19 +312,19 @@ worker-shell backend exposes a built-in `git` command. See
 
 Two ways to get a file out of the workspace and into the world:
 
-- **Assets** (`@cloudflare/computer/assets`): `createAssets(...).share`
+- **Assets** (`@vibe-box/computer/assets`): `createAssets(...).share`
   uploads a workspace file to R2 and returns a presigned URL. Attach it
   through `WorkspaceOptions.assets` to expose an in-shell
   `assets publish <path> [<expiry>]` command. See
   [`docs/14_assets_interface.md`](../../docs/14_assets_interface.md).
-- **Artifacts** (`@cloudflare/computer/artifacts`):
+- **Artifacts** (`@vibe-box/computer/artifacts`):
   `createArtifact(binding, sessionId)` is a session-scoped facade over
   the [Cloudflare Artifacts](https://developers.cloudflare.com/artifacts/)
   binding. Every repository name is implicitly prefixed with the session
   id, so one namespace hosts many isolated sessions.
 
 ```ts
-import { createArtifact } from "@cloudflare/computer/artifacts";
+import { createArtifact } from "@vibe-box/computer/artifacts";
 
 const artifacts = createArtifact(env.ARTIFACTS, agentId);
 const repo = await artifacts.create("build-cache", { description: "CI artifacts" });
@@ -377,27 +377,27 @@ stubs or on busy `exec` workloads. The full contract is in
 [`docs/11_lifecycle.md`](../../docs/11_lifecycle.md#stub-disposal-contract).
 
 To hunt leaks, set `CAPNWEB_TRACK_STUBS=1` and read `stubSnapshot()`
-from `@cloudflare/computer-rpc/debug`, or hit `GET /__computerd/stubs`
+from `@vibe-box/computer-rpc/debug`, or hit `GET /__computerd/stubs`
 on a computerd instance.
 
 ## Package entrypoints
 
 | Entrypoint | Purpose |
 | --- | --- |
-| `@cloudflare/computer` | The `Workspace` facade, `workspace.runtime`, stub types, the R2 mount, and proxy classes. |
-| `@cloudflare/computer/backends/container` | `CloudflareContainerBackend` and `withWorkspaceContainer`. Pulls in the computerd / capnweb sync plumbing. |
-| `@cloudflare/computer/backends/worker-shell` | `WorkerShellBackend` and the bundled just-bash runtime. |
-| `@cloudflare/computer/backends/worker-javascript` | `WorkerJavaScriptBackend`, configured libraries, durable imports, `node:fs/promises`, and trusted `ws:git` / `ws:artifacts`. |
-| `@cloudflare/computer/tools` | AI SDK tools for agents: `read`, `write`, `edit`, `ls`, optional `exec` and `publish`. |
-| `@cloudflare/computer/git` | Opt-in `isomorphic-git` glue for checkouts inside the workspace. |
-| `@cloudflare/computer/assets` | `createAssets` — share a workspace file to R2 as a presigned URL. |
-| `@cloudflare/computer/artifacts` | `createArtifact` and its CLI, a session-scoped facade over the Cloudflare Artifacts binding. |
-| `@cloudflare/computer/observe/cloudflare` | Cloudflare-runtime adapter for the observability hook. |
+| `@vibe-box/computer` | The `Workspace` facade, `workspace.runtime`, stub types, the R2 mount, and proxy classes. |
+| `@vibe-box/computer/backends/container` | `CloudflareContainerBackend` and `withWorkspaceContainer`. Pulls in the computerd / capnweb sync plumbing. |
+| `@vibe-box/computer/backends/worker-shell` | `WorkerShellBackend` and the bundled just-bash runtime. |
+| `@vibe-box/computer/backends/worker-javascript` | `WorkerJavaScriptBackend`, configured libraries, durable imports, `node:fs/promises`, and trusted `ws:git` / `ws:artifacts`. |
+| `@vibe-box/computer/tools` | AI SDK tools for agents: `read`, `write`, `edit`, `ls`, optional `exec` and `publish`. |
+| `@vibe-box/computer/git` | Opt-in `isomorphic-git` glue for checkouts inside the workspace. |
+| `@vibe-box/computer/assets` | `createAssets` — share a workspace file to R2 as a presigned URL. |
+| `@vibe-box/computer/artifacts` | `createArtifact` and its CLI, a session-scoped facade over the Cloudflare Artifacts binding. |
+| `@vibe-box/computer/observe/cloudflare` | Cloudflare-runtime adapter for the observability hook. |
 
 A consumer that only uses the container backend never imports the worker
 subpaths, so unused backend payloads tree-shake away. Wire types shared
 with the in-container service live in the sibling package
-`@cloudflare/computer-rpc`.
+`@vibe-box/computer-rpc`.
 
 ## Advanced
 
@@ -467,7 +467,7 @@ Cloudflare runtime's `ctx.tracing`, OpenTelemetry, or a test recorder;
 attribute values are restricted to `boolean | number | string`. The
 default is a zero-cost no-op, so there's no overhead unless you opt in.
 An adapter for the Cloudflare runtime lives at
-`@cloudflare/computer/observe/cloudflare`.
+`@vibe-box/computer/observe/cloudflare`.
 
 ## Examples
 

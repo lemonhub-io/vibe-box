@@ -10,8 +10,8 @@ import {
   stageBlob,
   writeFetchCursor,
   writeWatermark,
-} from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+} from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 
 import type { SyncRPC } from "./interface.js";

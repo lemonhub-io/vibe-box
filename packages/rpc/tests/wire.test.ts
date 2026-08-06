@@ -12,8 +12,8 @@ import {
   readFetchCursor,
   SQLiteWorkspaceProvider,
   writeFetchCursor,
-} from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+} from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { afterEach, describe, expect, it } from "vitest";
 import { WebSocketServer } from "ws";
 
@@ -193,7 +193,7 @@ describe("SyncRPC push convergence", () => {
         });
         // Use senderDb's currentRev as senderRev — we're
         // simulating a sync peer, not an external orchestrator.
-        const { currentRev } = await import("@cloudflare/dofs");
+        const { currentRev } = await import("@vibe-box/dofs");
         const result = await client.push({ senderRev: currentRev(senderDb), changes });
         expect(result.rev).toBeGreaterThan(0);
 
@@ -286,7 +286,7 @@ describe("SyncRPC pull convergence", () => {
   });
 });
 
-import { createWorkspaceError } from "@cloudflare/dofs";
+import { createWorkspaceError } from "@vibe-box/dofs";
 
 describe("WireError propagation", () => {
   let harness: Harness | undefined;
@@ -459,7 +459,7 @@ describe("push semantics — external vs sync peer", () => {
 
   it("push with senderRev=0 (external orchestrator) leaves pushRev alone so the outbound sync loop can ship the entry", async () => {
     harness = await startHarness();
-    const { coalesceChanges, currentRev, readWatermark } = await import("@cloudflare/dofs");
+    const { coalesceChanges, currentRev, readWatermark } = await import("@vibe-box/dofs");
     const client = createSyncClient({ url: harness.url });
     try {
       // Stage one chunk + push one entry as if we were an
@@ -513,7 +513,7 @@ describe("push semantics — external vs sync peer", () => {
   it("push with senderRev>0 (sync peer) leaves pushRev for the next push, advances fetchRev to senderRev", async () => {
     harness = await startHarness();
     const { currentRev, readFetchCursor, readWatermark, writeWatermark } = await import(
-      "@cloudflare/dofs"
+      "@vibe-box/dofs"
     );
     const client = createSyncClient({ url: harness.url });
     try {

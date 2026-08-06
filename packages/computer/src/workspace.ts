@@ -4,12 +4,12 @@
 // dofs Database (the host store) and a SyncRPC connection
 // to computerd. Filesystem operations on Workspace.fs mutate the local
 // store directly via the WorkspaceFilesystem class from
-// @cloudflare/dofs; sync between the host store and computerd
+// @vibe-box/dofs; sync between the host store and computerd
 // is driven explicitly via Workspace.push() / Workspace.pull().
 // Command-backend pre-exec push / post-exec pull brackets are
 // routed through Workspace.runtime.exec.
 
-import { pullOnce, pushOnce, reconcileWatermarks } from "@cloudflare/computer-rpc/driver";
+import { pullOnce, pushOnce, reconcileWatermarks } from "@vibe-box/computer-rpc/driver";
 import {
   type ApplyResult,
   Database,
@@ -17,7 +17,7 @@ import {
   initializeSchema,
   SQLiteWorkspaceProvider,
   WorkspaceFilesystem,
-} from "@cloudflare/dofs";
+} from "@vibe-box/dofs";
 
 import {
   type ArtifactClient,
@@ -81,7 +81,7 @@ const DEFAULT_RETRY_MAX_ATTEMPTS = 5;
 export interface WorkspaceOptions {
   // Local store backing this Workspace. In a Durable Object, pass
   // `ctx.storage`; in tests, pass a SQLiteTestStorage from
-  // @cloudflare/dofs/testing. The constructor opens a
+  // @vibe-box/dofs/testing. The constructor opens a
   // Database against it and runs initializeSchema (idempotent).
   storage: DurableObjectStorageLike;
 
@@ -123,7 +123,7 @@ export interface WorkspaceOptions {
 
   // Optional git client factory. Omit it to keep the default
   // Workspace graph free of isomorphic-git; pass createGitClient()
-  // from @cloudflare/computer/git when the caller needs
+  // from @vibe-box/computer/git when the caller needs
   // workspace.git or the worker backend's built-in git command.
   git?: WorkspaceGitFactory;
 
@@ -187,7 +187,7 @@ export type WorkspaceGitFactory = GitClientFactory;
 
 const GIT_NOT_CONFIGURED_MESSAGE =
   "Workspace git is not configured. Import createGitClient from " +
-  "@cloudflare/computer/git and pass createGitClient() as WorkspaceOptions.git.";
+  "@vibe-box/computer/git and pass createGitClient() as WorkspaceOptions.git.";
 
 const DISABLED_GIT_CLIENT = new Proxy(
   {},
@@ -371,7 +371,7 @@ export class Workspace {
   // reads and writes hit the local store, not the wire.
   //
   // Read-only mount enforcement lives at the data layer in
-  // @cloudflare/dofs: writeFile / mkdir / rm consult the registered
+  // @vibe-box/dofs: writeFile / mkdir / rm consult the registered
   // mount roots and reject EROFS without needing a workspace-side
   // wrapper. The same check fires on the apply path used by
   // pullOnce, so container-side writes under a read-only mount are
@@ -447,7 +447,7 @@ export class Workspace {
    *
    * ```ts
    * import { create, VirtualProvider } from "@platformatic/vfs";
-   * import type { SQLiteWorkspaceProvider } from "@cloudflare/dofs";
+   * import type { SQLiteWorkspaceProvider } from "@vibe-box/dofs";
    *
    * class Glue extends VirtualProvider {
    *   constructor(private inner: SQLiteWorkspaceProvider) { super(); }

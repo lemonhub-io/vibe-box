@@ -83,10 +83,10 @@ wrangler r2 bucket create recipe-cards
 ## 2. Install the dependencies
 
 ```sh
-npm install @cloudflare/computer @cloudflare/think agents ai zod
+npm install @vibe-box/computer @cloudflare/think agents ai zod
 ```
 
-- `@cloudflare/computer` is the filesystem, the container backend, and
+- `@vibe-box/computer` is the filesystem, the container backend, and
   the assets client that publishes to R2.
 - `@cloudflare/think` provides the agent loop and its file, shell, and
   fetch tools. `agents` provides `getAgentByName` for reaching an
@@ -100,7 +100,7 @@ the workspace daemon, has to be PID 1. It mounts the workspace at
 the image is yours — here, `pandoc` and a PDF engine for it.
 
 ```dockerfile
-FROM ghcr.io/cloudflare/computer-computerd-linux-x64:VERSION AS computerd
+FROM ghcr.io/lemonhub-io/computer-computerd-linux-x64:VERSION AS computerd
 
 FROM debian:stable-slim
 
@@ -129,24 +129,24 @@ reachable, which it is on Cloudflare Containers, and falls back to a
 userspace shim otherwise, which is what `wrangler dev` gets. One image
 works in both places.
 
-## 4. Give Think a Computer workspace
+## 4. Give Think a Vibe Box workspace
 
 The durable object owns a `CloudflareContainerBackend`, which is the
 container the workspace is mounted in. The `Workspace` instance enables
-Computer's Think-compatible methods so Think's built-in tools use the
+Vibe Box's Think-compatible methods so Think's built-in tools use the
 same filesystem as the container.
 
 ```ts
 import {
   CloudflareContainerBackend,
   withWorkspaceContainer,
-} from "@cloudflare/computer/backends/container";
+} from "@vibe-box/computer/backends/container";
 import { Think } from "@cloudflare/think";
 import {
   type DurableObjectStorageLike,
   type ThinkWorkspaceCompatibility,
   Workspace,
-} from "@cloudflare/computer";
+} from "@vibe-box/computer";
 
 class RecipeBase extends Think<Env> {}
 
@@ -178,7 +178,7 @@ hand `/ws` to the backend before the base class sees it.
 
 ## 5. Hook the workspace up to the agent
 
-Think already has file and shell tools. The Computer workspace makes
+Think already has file and shell tools. The Vibe Box workspace makes
 those tools use the same filesystem as the container:
 `write` calls Computer's host-side filesystem, while `bash` calls the
 container shell. Think's fetch tool gets an allowlist of one host, so
@@ -296,7 +296,7 @@ Three exports have to be reachable from the entrypoint: the default
 handler, the `RecipeAgent` class the durable object binding names, and
 `WorkspaceProxy`, which carries the container's egress back to the
 durable object. `WorkspaceProxy` is re-exported from
-`@cloudflare/computer`; the runtime binds it by name, so it has to
+`@vibe-box/computer`; the runtime binds it by name, so it has to
 appear in the module graph even though your code never calls it.
 
 ## Running it
@@ -327,11 +327,11 @@ npm run build:types
 ```
 
 From this repository's root, install the dependencies, build the
-Computer package, and run the tutorial:
+Vibe Box package, and run the tutorial:
 
 ```sh
 npm install
-npm run build --workspace @cloudflare/computer
+npm run build --workspace @vibe-box/computer
 npm run dev --workspace @example/computer-tutorial
 ```
 

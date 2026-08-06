@@ -1,12 +1,12 @@
 {
-  "name": "@cloudflare/computer",
+  "name": "@vibe-box/computer",
   "version": "0.1.0-alpha.1",
-  "description": "Cloudflare Computer — a SQLite-backed virtual filesystem with sync to a container-side daemon (computerd).",
+  "description": "Vibe Box — a SQLite-backed virtual filesystem with sync to a container-side daemon (computerd).",
   "license": "MIT",
   "repository": {
     "directory": "packages/computer",
     "type": "git",
-    "url": "git+https://github.com/cloudflare/computer.git"
+    "url": "git+https://github.com/lemonhub-io/vibe-box.git"
   },
   "private": false,
   "type": "module",
@@ -58,7 +58,7 @@
     "README.md"
   ],
   "scripts": {
-    "build:deps": "npm run build --workspace @cloudflare/computer-rpc",
+    "build:deps": "npm run build --workspace @vibe-box/computer-rpc",
     "build:shell-bundle": "node ./src/backends/worker-shell/script/build-bundle.mjs",
     "prebuild": "npm run build:deps && npm run build:shell-bundle",
     "pretest": "npm run build:shell-bundle",
@@ -96,11 +96,11 @@
     }
   },
   "devDependencies": {
-    "@cloudflare/computer-rpc": "*",
-    "@cloudflare/dofs": "*",
     "@cloudflare/vitest-pool-workers": "^0.16.10",
     "@cloudflare/workers-types": "^4.20260616.1",
     "@platformatic/vfs": "^0.4.0",
+    "@vibe-box/computer-rpc": "*",
+    "@vibe-box/dofs": "*",
     "ai": "^7.0.0",
     "diff": "^9.0.0",
     "esbuild": "^0.28.1",

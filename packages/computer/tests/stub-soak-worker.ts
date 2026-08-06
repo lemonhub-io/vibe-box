@@ -8,17 +8,17 @@
 //                            RPC boundary. The caller's stub goes
 //                            through capnweb-style disposal.
 //        stubSnapshot()   — reads the per-class live counter from
-//                            @cloudflare/computer-rpc/debug.
+//                            @vibe-box/computer-rpc/debug.
 //
 //   - TestDriver (default): a WorkerEntrypoint with a single
 //     fetch() that runs the soak workload. Lets the test drive
 //     the cross-boundary calls with one round trip per test case.
 
 import { DurableObject, WorkerEntrypoint } from "cloudflare:workers";
-import type { ShellRPC, SyncRPC, WorkspaceRPC } from "@cloudflare/computer-rpc";
-import { enableStubTracking, stubSnapshot } from "@cloudflare/computer-rpc/debug";
-import type { ChangeEntry } from "@cloudflare/dofs";
-import { Database, initializeSchema } from "@cloudflare/dofs";
+import type { ShellRPC, SyncRPC, WorkspaceRPC } from "@vibe-box/computer-rpc";
+import { enableStubTracking, stubSnapshot } from "@vibe-box/computer-rpc/debug";
+import type { ChangeEntry } from "@vibe-box/dofs";
+import { Database, initializeSchema } from "@vibe-box/dofs";
 
 import type { BackendHandle, WorkspaceBackend } from "../src/backend.js";
 import type { WorkspaceStub } from "../src/stub.js";

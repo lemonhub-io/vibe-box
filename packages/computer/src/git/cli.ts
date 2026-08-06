@@ -201,7 +201,7 @@ function printVersion(): GitCliResult {
   // Consumers that fingerprint via `git --version` will see this
   // and can branch on it.
   return {
-    stdout: "git version 0.0.0 (@cloudflare/computer)\n",
+    stdout: "git version 0.0.0 (@vibe-box/computer)\n",
     stderr: "",
     exitCode: 0,
   };

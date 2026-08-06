@@ -8,7 +8,7 @@
 // pure-JS fixture that also lives in dofs's testing surface
 // — has moved to ./testing-recording.ts so it can be imported
 // from workerd-runnable tests. We re-export it here so existing
-// `import { RecordingStorage } from "@cloudflare/dofs/testing"`
+// `import { RecordingStorage } from "@vibe-box/dofs/testing"`
 // call sites keep working under node.
 
 import { DatabaseSync, type StatementSync } from "node:sqlite";

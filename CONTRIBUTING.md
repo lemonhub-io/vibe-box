@@ -1,16 +1,16 @@
 # Contributing
 
-Thanks for your interest in Cloudflare Computer. This repository accepts issues and discussions as the public contribution paths. It does not accept unsolicited pull requests.
+Thanks for your interest in Vibe Box. This repository accepts issues and discussions as the public contribution paths. It does not accept unsolicited pull requests.
 
 ## What to open
 
 Use one of these routes:
 
 1. **Bug reports, regressions, and fix proposals**
-   - Open an issue: <https://github.com/cloudflare/computer/issues/new/choose>
+   - Open an issue: <https://github.com/lemonhub-io/vibe-box/issues/new/choose>
    - Include steps to reproduce, what you expected to happen, what happened instead, and any relevant package version, runtime, operating system, Worker, or Container setup.
 2. **Feature requests, enhancements, and design proposals**
-   - Start a discussion: <https://github.com/cloudflare/computer/discussions/new?category=feature-request>
+   - Start a discussion: <https://github.com/lemonhub-io/vibe-box/discussions/new?category=feature-request>
    - Describe the problem, the users affected, the outcome you want, and any API or workflow example that makes the proposal easier to evaluate.
 
 ## Pull requests

@@ -1,4 +1,4 @@
-// Tests for `@cloudflare/computer/git`'s `cloneWith` wrapper.
+// Tests for `@vibe-box/computer/git`'s `cloneWith` wrapper.
 //
 // `cloneWith` is fundamentally an option-translator: it sets a
 // handful of defaults, splits the user's request into a

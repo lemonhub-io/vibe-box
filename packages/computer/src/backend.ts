@@ -18,7 +18,7 @@
 // not see method signatures; they only produce handles and tear
 // them down.
 
-import type { WorkspaceRPC } from "@cloudflare/computer-rpc";
+import type { WorkspaceRPC } from "@vibe-box/computer-rpc";
 
 // The handles the Workspace owns and injects into a backend when
 // it connects. The Workspace constructor builds `db`/`fs` itself,
@@ -29,8 +29,8 @@ import type { WorkspaceRPC } from "@cloudflare/computer-rpc";
 // container backends ignore the bag (they reach the host through
 // their own transport); the in-process module backend uses it.
 export interface WorkspaceBackendHost {
-  readonly db: import("@cloudflare/dofs").Database;
-  readonly fs: import("@cloudflare/dofs").WorkspaceFilesystem;
+  readonly db: import("@vibe-box/dofs").Database;
+  readonly fs: import("@vibe-box/dofs").WorkspaceFilesystem;
   readonly git: import("./git/index.js").GitClient;
   readonly artifacts: import("./artifacts/index.js").ArtifactClient;
 }

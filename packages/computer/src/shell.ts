@@ -20,8 +20,8 @@
 // it reports pushed = 0; the post-drain pull still fires, scoped to
 // whatever landed between reattach and drain.
 
-import type { ExecEvent, ShellRPC } from "@cloudflare/computer-rpc";
-import type { ApplyResult, SkippedEntry } from "@cloudflare/dofs";
+import type { ExecEvent, ShellRPC } from "@vibe-box/computer-rpc";
+import type { ApplyResult, SkippedEntry } from "@vibe-box/dofs";
 
 import { noopObserver, safeErrorMessage, type WorkspaceObserver, withSpan } from "./observe.js";
 import { assertNotTemplate } from "./sh.js";

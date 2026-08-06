@@ -22,7 +22,7 @@ const runtimeCopy: Record<
 > = {
   workspace: {
     label: "Workspace",
-    packageName: "@cloudflare/computer",
+    packageName: "@vibe-box/computer",
   },
   sandbox: {
     label: "Sandbox",

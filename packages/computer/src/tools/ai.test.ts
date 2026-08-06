@@ -1,4 +1,4 @@
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 import type { WorkspaceRuntimeExecHandle, WorkspaceRuntimeResult } from "../runtime/types.js";
 import { Workspace } from "../workspace.js";
@@ -81,16 +81,16 @@ function makeWorkspace(): Workspace {
 // genuine WorkspaceRuntime handle rather than a hand-shaped fake:
 // this pins the ExecWorkspaceLike binding and the assumption that the
 // real handle is async-iterable.
-function streamingCommandBackend(events: import("@cloudflare/computer-rpc").ExecEvent[]): {
+function streamingCommandBackend(events: import("@vibe-box/computer-rpc").ExecEvent[]): {
   id: string;
   type: string;
   connect(): Promise<{
-    rpc: import("@cloudflare/computer-rpc").WorkspaceRPC;
+    rpc: import("@vibe-box/computer-rpc").WorkspaceRPC;
     sync: "none";
     close(): Promise<void>;
   }>;
 } {
-  const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+  const shell: import("@vibe-box/computer-rpc").ShellRPC = {
     async exec(input) {
       const id = input.id ?? "cmd-1";
       return {
@@ -110,7 +110,7 @@ function streamingCommandBackend(events: import("@cloudflare/computer-rpc").Exec
   const noopSync = new Proxy(
     {},
     { get: () => () => Promise.reject(new Error("sync: none")) },
-  ) as import("@cloudflare/computer-rpc").SyncRPC;
+  ) as import("@vibe-box/computer-rpc").SyncRPC;
   return {
     id: "shell",
     type: "fake-command",

@@ -44,12 +44,12 @@ jobs:
             }
 
             const body = [
-              'Thanks for your interest in Cloudflare Computer.',
+              'Thanks for your interest in Vibe Box.',
               '',
               'This repository does not accept unsolicited pull requests. Please use one of the accepted contribution paths instead:',
               '',
-              '- Bug reports, regressions, and fix proposals: https://github.com/cloudflare/computer/issues/new/choose',
-              '- Feature requests, enhancements, and design proposals: https://github.com/cloudflare/computer/discussions',
+              '- Bug reports, regressions, and fix proposals: https://github.com/lemonhub-io/vibe-box/issues/new/choose',
+              '- Feature requests, enhancements, and design proposals: https://github.com/lemonhub-io/vibe-box/discussions',
               '',
               'If a maintainer asked you to open this pull request, they can add the `allow-pr` label and reopen it.'
             ].join('\n');

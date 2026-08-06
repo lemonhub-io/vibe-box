@@ -8,7 +8,7 @@
 // regression in the adapter that "succeeds" but skips the DB
 // shows up immediately.
 
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { Bash } from "just-bash";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

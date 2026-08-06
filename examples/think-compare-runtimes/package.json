@@ -1,10 +1,10 @@
 {
-  "name": "@cloudflare/example-think-compare-runtimes",
+  "name": "@vibe-box/example-think-compare-runtimes",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build:computerd": "npm run build:docker --workspace @cloudflare/computerd",
+    "build:computerd": "npm run build:docker --workspace @vibe-box/computerd",
     "predev": "npm run build:computerd",
     "predeploy": "npm run build:computerd",
     "dev": "vite",
@@ -16,8 +16,6 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
-    "@cloudflare/computer": "*",
-    "@cloudflare/computer-rpc": "*",
     "@cloudflare/kumo": "^2.4.1",
     "@cloudflare/sandbox": "^0.11.0",
     "@cloudflare/shell": "^0.4.3",
@@ -27,6 +25,8 @@
     "@shikijs/engine-javascript": "^4.2.0",
     "@shikijs/langs": "^4.2.0",
     "@shikijs/themes": "^4.2.0",
+    "@vibe-box/computer": "*",
+    "@vibe-box/computer-rpc": "*",
     "agents": "^0.20.0",
     "ai": "^7.0.0",
     "partyserver": "^0.5.6",

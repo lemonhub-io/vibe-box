@@ -1,4 +1,4 @@
-import type { SkippedEntry } from "@cloudflare/dofs";
+import type { SkippedEntry } from "@vibe-box/dofs";
 
 import type { ExecEncoding, ExecSyncResult, KillSignal } from "../shell.js";
 

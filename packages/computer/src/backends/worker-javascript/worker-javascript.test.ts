@@ -1,5 +1,5 @@
-import { Database, initializeSchema, WorkspaceFilesystem } from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { Database, initializeSchema, WorkspaceFilesystem } from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it, vi } from "vitest";
 
 import { Workspace } from "../../workspace.js";

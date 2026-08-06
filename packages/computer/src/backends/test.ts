@@ -7,7 +7,7 @@
 // plumbing. The test harness outside the package is what
 // stands up the computerd container and exposes its port.
 
-import { createWorkspaceClient } from "@cloudflare/computer-rpc/client";
+import { createWorkspaceClient } from "@vibe-box/computer-rpc/client";
 
 import type { BackendHandle, WorkspaceBackend } from "../backend.js";
 

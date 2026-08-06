@@ -1,4 +1,4 @@
-// Public surface of @cloudflare/computer-rpc.
+// Public surface of @vibe-box/computer-rpc.
 //
 // The package is split into four entry points:
 //

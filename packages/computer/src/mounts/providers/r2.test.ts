@@ -1,4 +1,4 @@
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 
 import { Workspace } from "../../workspace.js";

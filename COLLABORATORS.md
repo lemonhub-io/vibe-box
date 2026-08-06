@@ -16,7 +16,7 @@ Requirements:
 Clone and install from the repo root:
 
 ```bash
-git clone https://github.com/cloudflare/computer.git
+git clone https://github.com/lemonhub-io/vibe-box.git
 cd computer
 npm install
 ```
@@ -30,7 +30,7 @@ The repo is a small monorepo. Each package owns its own `README.md` with package
 - [`packages/dofs`](packages/dofs/) — Durable Object SQLite-backed virtual filesystem, sync protocol building blocks, and a `@platformatic/vfs` provider for Node.
 - [`packages/rpc`](packages/rpc/) — capnweb-based wire types and server/client helpers shared between the Durable Object and `computerd`.
 - [`packages/computerd`](packages/computerd/) — the `computerd` daemon: a FUSE mount plus HTTP/WebSocket RPC server that runs inside the sandbox container.
-- [`packages/computer`](packages/computer/) — the top-level `@cloudflare/computer` package consumed by Durable Objects.
+- [`packages/computer`](packages/computer/) — the top-level `@vibe-box/computer` package consumed by Durable Objects.
 - [`packages/computer-computerd-linux-x64`](packages/computer-computerd-linux-x64/) — the prebuilt `computerd` binary for linux-x64, distributed for use in container images.
 
 [`docs/`](docs/) holds the design specification. It is forward-looking and has diverged from `main` in places. Treat it as intent, not as a description of the code today.
@@ -66,13 +66,13 @@ npm test
 For a single package:
 
 ```bash
-npm test --workspace @cloudflare/dofs
+npm test --workspace @vibe-box/dofs
 ```
 
 For a single test file inside a package:
 
 ```bash
-npm test --workspace @cloudflare/dofs -- src/path/to/file.test.ts
+npm test --workspace @vibe-box/dofs -- src/path/to/file.test.ts
 ```
 
 `packages/computerd` includes FUSE-backed tests that only run on Linux. On other platforms they are skipped automatically.
@@ -123,7 +123,7 @@ External pull requests are closed automatically unless they come from an owner, 
 
 Releases run on [changesets](https://github.com/changesets/changesets).
 The short version: a change that should ship a new version of
-`@cloudflare/computer` needs a changeset alongside it. Everything after
+`@vibe-box/computer` needs a changeset alongside it. Everything after
 that is automated.
 
 When your change alters what a released package or image does, add a
@@ -146,8 +146,8 @@ over in two steps:
 1. It gathers the pending changesets into a "Version Packages" pull
    request that bumps package versions, rewrites changelogs, and updates
    Dockerfile and documentation pins for the `computerd` image. Private
-   packages such as `@cloudflare/dofs`, `@cloudflare/computer-rpc`, and
-   `@cloudflare/computerd` are versioned and get changelogs, but are not
+   packages such as `@vibe-box/dofs`, `@vibe-box/computer-rpc`, and
+   `@vibe-box/computerd` are versioned and get changelogs, but are not
    published to npm.
 2. Merging that pull request first builds and pushes the `computerd`
    binary image to `ghcr.io` and `registry.cloudflare.com`, then publishes
@@ -155,7 +155,7 @@ over in two steps:
    tags are pushed again and existing npm versions are skipped.
 
 The package publishes under the `unreleased` dist-tag while it's
-pre-1.0, so `npm install @cloudflare/computer` does not yet pick up
+pre-1.0, so `npm install @vibe-box/computer` does not yet pick up
 these releases. Promoting it to `latest` is a deliberate maintainer
 step: drop `publishConfig.tag` from `packages/computer/package.json`.
 

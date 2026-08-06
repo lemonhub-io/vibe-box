@@ -3,7 +3,7 @@
 // Two surfaces shipped with no direct coverage:
 //
 //   - ShellRpcServer wraps a RunnerLike. The Runner type lives in
-//     @cloudflare/computerd; rpc only depends on the structural
+//     @vibe-box/computerd; rpc only depends on the structural
 //     RunnerLike interface from server.ts. Tests wire up a fake
 //     RunnerLike rather than dragging computerd into the rpc test graph.
 //
@@ -18,8 +18,8 @@
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 
-import { Database, initializeSchema, ROOT_INODE } from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { Database, initializeSchema, ROOT_INODE } from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { afterEach, describe, expect, it } from "vitest";
 import { WebSocketServer } from "ws";
 import { createSyncClient, createWorkspaceClient } from "../src/client.js";

@@ -1,12 +1,12 @@
 # Image-only distribution of the computerd-linux-x64 SEA binary.
 #
-# Build via `npm run build:docker --workspace @cloudflare/computerd`,
+# Build via `npm run build:docker --workspace @vibe-box/computerd`,
 # which stages the SEA artifact into ./bin/computerd first and then runs
 # `docker build` against this directory. The image isn't meant to be
 # run as a service — its sole job is to ship the binary at a known
 # path so downstream Dockerfiles can `COPY --from`:
 #
-#   FROM cloudflare/computer-computerd-linux-x64:0.1.1 AS computerd
+#   FROM lemonhub-io/computer-computerd-linux-x64:0.1.1 AS computerd
 #   FROM debian:stable-slim
 #   COPY --from=computerd /usr/local/bin/computerd /usr/local/bin/computerd
 #

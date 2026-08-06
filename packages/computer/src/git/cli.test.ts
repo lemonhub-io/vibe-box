@@ -18,7 +18,7 @@
 //      `clone.test.ts`'s subset-checkout test — because spinning
 //      up a real upload-pack server is out of scope.
 
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import git from "isomorphic-git";
 import { describe, expect, it, vi } from "vitest";
 import { Workspace } from "../workspace.js";
@@ -374,7 +374,7 @@ describe("runGitCli — dispatch", () => {
     const { client } = fakeClient();
     const res = await runGitCli(client, { argv: ["version"] });
     expect(res.exitCode).toBe(0);
-    expect(res.stdout).toContain("@cloudflare/computer");
+    expect(res.stdout).toContain("@vibe-box/computer");
   });
 
   it("unknown subcommands exit 1 with a git-shaped stderr line", async () => {
@@ -455,25 +455,25 @@ describe("runGitCli — clone argv parsing", () => {
   it("derives the dir from the URL basename, stripping a .git suffix", async () => {
     const { client, calls } = fakeClient();
     await runGitCli(client, {
-      argv: ["clone", "https://github.com/cloudflare/computer"],
+      argv: ["clone", "https://github.com/lemonhub-io/vibe-box"],
       cwd: "/workspace",
     });
-    expect(calls.clone[0].dir).toBe("/workspace/computer");
+    expect(calls.clone[0].dir).toBe("/workspace/vibe-box");
   });
 
   it("derives the dir from a URL with a trailing slash", async () => {
     const { client, calls } = fakeClient();
     await runGitCli(client, {
-      argv: ["clone", "https://github.com/cloudflare/computer/"],
+      argv: ["clone", "https://github.com/lemonhub-io/vibe-box/"],
       cwd: "/workspace",
     });
-    expect(calls.clone[0].dir).toBe("/workspace/computer");
+    expect(calls.clone[0].dir).toBe("/workspace/vibe-box");
   });
 
   it("prefers an explicit destination over the derived basename", async () => {
     const { client, calls } = fakeClient();
     await runGitCli(client, {
-      argv: ["clone", "https://github.com/cloudflare/computer", "/dst/cf-workspace"],
+      argv: ["clone", "https://github.com/lemonhub-io/vibe-box", "/dst/cf-workspace"],
       cwd: "/work",
     });
     expect(calls.clone[0].dir).toBe("/dst/cf-workspace");

@@ -17,12 +17,12 @@ Import via the sub-path so the bundled just-bash payload tree-shakes
 out of consumers that don't use it:
 
 ```ts
-import { WorkerShellBackend } from "@cloudflare/computer/backends/worker-shell";
+import { WorkerShellBackend } from "@vibe-box/computer/backends/worker-shell";
 ```
 
 ## When to reach for it
 
-The container backend (`@cloudflare/computer/backends/container`)
+The container backend (`@vibe-box/computer/backends/container`)
 gives you a real Linux environment with arbitrary binaries on
 `$PATH`, network, and a full POSIX filesystem. It costs a container
 per session and a real roundtrip on every filesystem op.
@@ -115,7 +115,7 @@ values passed through the Worker Loader's `env` go through
 structured clone, and a raw `DurableObjectNamespace` doesn't
 survive that.
 
-`WorkspaceServiceProxy` (in `@cloudflare/computer`) is a tiny
+`WorkspaceServiceProxy` (in `@vibe-box/computer`) is a tiny
 `WorkerEntrypoint` whose `getWorkspace()` method does the
 namespace lookup on the host side. The backend mints a stub
 through `ctx.exports.WorkspaceServiceProxy({ props: { binding,
@@ -250,7 +250,7 @@ network-bound `git` subcommands do. See
   `/c/<name>/file/...` and `/c/<name>/exec` routes the container
   example also exposes).
 - No Dockerfile, no build script. The shell bundle ships with
-  `@cloudflare/computer/backends/worker-shell` as `SHELL_MODULES`
+  `@vibe-box/computer/backends/worker-shell` as `SHELL_MODULES`
   (a record of module name → source covering the entry plus
   every code-split chunk); the backend hands the whole record
   to the Loader callback itself.

@@ -50,7 +50,7 @@ jobs:
         with:
           registry-url: "https://registry.npmjs.org"
 
-      # @cloudflare/computer's prepublishOnly runs `npm run build && npm
+      # @vibe-box/computer's prepublishOnly runs `npm run build && npm
       # test`; its tests spawn the computerd binary, which dynamically links
       # libfuse2 and uses fuse3 helpers for the FUSE_MOUNT=shim path. Without
       # these the suite fails with `libfuse.so.2: cannot open shared object

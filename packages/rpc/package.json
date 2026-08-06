@@ -1,5 +1,5 @@
 {
-  "name": "@cloudflare/computer-rpc",
+  "name": "@vibe-box/computer-rpc",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -27,14 +27,14 @@
   },
   "types": "./dist/index.d.ts",
   "scripts": {
-    "prebuild": "npm run build --workspace @cloudflare/dofs",
+    "prebuild": "npm run build --workspace @vibe-box/dofs",
     "build": "tsc -p tsconfig.build.json",
-    "pretypecheck": "npm run build --workspace @cloudflare/dofs",
+    "pretypecheck": "npm run build --workspace @vibe-box/dofs",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "test": "vitest run"
   },
   "dependencies": {
-    "@cloudflare/dofs": "*",
+    "@vibe-box/dofs": "*",
     "capnweb": "^0.8.0"
   },
   "devDependencies": {

@@ -26,7 +26,7 @@ import {
   stageBlob,
   writeFetchCursor,
   writeWatermark,
-} from "@cloudflare/dofs";
+} from "@vibe-box/dofs";
 
 import type { SyncRPC } from "./interface.js";
 

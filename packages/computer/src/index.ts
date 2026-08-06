@@ -1,4 +1,4 @@
-// Public surface of @cloudflare/computer.
+// Public surface of @vibe-box/computer.
 //
 // The package runs inside a Cloudflare Worker / Durable
 // Object. It picks a backend, holds a SyncRPC connection to
@@ -9,8 +9,8 @@
 // backend, etc.) can be tree-shaken when a consumer only uses
 // one of them:
 //
-//   import { CloudflareContainerBackend } from "@cloudflare/computer/backends/container";
-//   import { WorkerShellBackend }         from "@cloudflare/computer/backends/worker-shell";
+//   import { CloudflareContainerBackend } from "@vibe-box/computer/backends/container";
+//   import { WorkerShellBackend }         from "@vibe-box/computer/backends/worker-shell";
 //
 // TestBackend stays on the main entry because it's a thin
 // test-only fake with no payload.
@@ -20,8 +20,8 @@ export type {
   DurableObjectStorageLike,
   SkippedEntry,
   SQLiteWorkspaceProviderOptions,
-} from "@cloudflare/dofs";
-export { SQLiteWorkspaceProvider } from "@cloudflare/dofs";
+} from "@vibe-box/dofs";
+export { SQLiteWorkspaceProvider } from "@vibe-box/dofs";
 export type { BackendHandle, WorkspaceBackend } from "./backend.js";
 export { TestBackend, type TestBackendOptions } from "./backends/test.js";
 export {

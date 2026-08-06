@@ -1,9 +1,9 @@
 {
-  "name": "@example/computer-worker-shell",
+  "name": "@example/vibe-worker-shell",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Example Worker + Durable Object that runs just-bash inside a Dynamic Worker via @cloudflare/computer's WorkerShellBackend.",
+  "description": "Example Worker + Durable Object that runs just-bash inside a Dynamic Worker via @vibe-box/computer's WorkerShellBackend.",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
@@ -12,7 +12,7 @@
     "seed:r2:local": "wrangler r2 object put computer-worker-shell-hello/hello.txt --file ./seed/data/hello.txt --local"
   },
   "dependencies": {
-    "@cloudflare/computer": "*"
+    "@vibe-box/computer": "*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260616.1",

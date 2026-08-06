@@ -1,4 +1,4 @@
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it, vi } from "vitest";
 
 import type { BackendHandle, WorkspaceBackend } from "../backend.js";
@@ -474,7 +474,7 @@ describe("mount indexer", () => {
     // Wire a no-op SyncRPC just rich enough for #connect() to
     // succeed and reconcileWatermarks() to find what it needs.
     // Mirrors the fakeRpc() pattern from workspace.test.ts.
-    const sync: import("@cloudflare/computer-rpc").SyncRPC = {
+    const sync: import("@vibe-box/computer-rpc").SyncRPC = {
       async push(input) {
         const reader = input.changes.getReader();
         try {
@@ -491,7 +491,7 @@ describe("mount indexer", () => {
         return {
           currentCursor: { rev: 0, path: null },
           appliedPushCursor: { rev: 0, path: null },
-          stream: new ReadableStream<import("@cloudflare/dofs").ChangeEntry>({
+          stream: new ReadableStream<import("@vibe-box/dofs").ChangeEntry>({
             start(c) {
               c.close();
             },
@@ -527,7 +527,7 @@ describe("mount indexer", () => {
       },
     };
     const notWired = () => Promise.reject(new Error("shell not wired"));
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       exec: notWired,
       getExec: notWired,
       killExec: notWired,

@@ -1,4 +1,4 @@
-# `@cloudflare/computer-rpc`
+# `@vibe-box/computer-rpc`
 
 > [!IMPORTANT]
 > **PREVIEW ONLY** This package is provided as a preview for feedback only.
@@ -50,7 +50,7 @@ import {
   enableStubTracking,
   isStubTrackingEnabled,
   stubSnapshot,
-} from "@cloudflare/computer-rpc/debug";
+} from "@vibe-box/computer-rpc/debug";
 
 // Either set CAPNWEB_TRACK_STUBS=1 in the environment, or call
 // enableStubTracking() at module init in runtimes (like workerd)

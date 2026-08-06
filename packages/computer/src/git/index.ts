@@ -1,4 +1,4 @@
-// Public surface of @cloudflare/computer/git.
+// Public surface of @vibe-box/computer/git.
 //
 // `createGitClient()` is the one entry point. It returns a
 // WorkspaceOptions.git factory; the factory binds a workspace
@@ -21,7 +21,7 @@
 // against node:fs directly — but the workspace-bound path is the
 // only one most consumers need.
 
-import type { SQLiteWorkspaceProvider } from "@cloudflare/dofs";
+import type { SQLiteWorkspaceProvider } from "@vibe-box/dofs";
 
 import { type IsomorphicGitFSClient, workspaceIsomorphicGitClient } from "./adapter.js";
 import { type GitCliInput, type GitCliResult, runGitCli } from "./cli.js";
@@ -710,7 +710,7 @@ async function loadIsomorphicGit<T = unknown>(): Promise<T> {
     return (mod.default ?? mod) as unknown as T;
   } catch (cause) {
     throw new Error(
-      "Failed to load @cloudflare/computer/git's bundled isomorphic-git implementation.",
+      "Failed to load @vibe-box/computer/git's bundled isomorphic-git implementation.",
       { cause },
     );
   }
@@ -721,7 +721,7 @@ async function loadDefaultHTTP(): Promise<object> {
     const mod = await import("isomorphic-git/http/web");
     return mod.default;
   } catch (cause) {
-    throw new Error("Failed to load @cloudflare/computer/git's bundled HTTP transport.", { cause });
+    throw new Error("Failed to load @vibe-box/computer/git's bundled HTTP transport.", { cause });
   }
 }
 
@@ -730,7 +730,7 @@ async function loadCreatePatch(): Promise<CreatePatchFn> {
     const mod = await import("diff");
     return mod.createPatch;
   } catch (cause) {
-    throw new Error("Failed to load @cloudflare/computer/git's bundled diff implementation.", {
+    throw new Error("Failed to load @vibe-box/computer/git's bundled diff implementation.", {
       cause,
     });
   }

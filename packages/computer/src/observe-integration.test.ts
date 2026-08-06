@@ -4,8 +4,8 @@
 // attributes. The recorder lives in `./observe.test.ts` and is shared
 // across both files.
 
-import type { SyncRPC, WorkspaceRPC } from "@cloudflare/computer-rpc";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import type { SyncRPC, WorkspaceRPC } from "@vibe-box/computer-rpc";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 
 import type { BackendHandle, WorkspaceBackend } from "./backend.js";
@@ -39,7 +39,7 @@ function fakeSync(): SyncRPC {
       return {
         currentCursor: { rev: 0, path: null },
         appliedPushCursor: { rev: 0, path: null },
-        stream: new ReadableStream<import("@cloudflare/dofs").ChangeEntry>({
+        stream: new ReadableStream<import("@vibe-box/dofs").ChangeEntry>({
           start(c) {
             c.close();
           },
@@ -240,12 +240,12 @@ describe("Workspace observer — runtime stub", () => {
     // resolve right away. A minimal envelope is enough — the test only
     // asserts on span shape, not on stdout content.
     const execed: string[] = [];
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec(input) {
         execed.push(input.source);
         return {
           id: "exec-1",
-          events: new ReadableStream<import("@cloudflare/computer-rpc").ExecEvent>({
+          events: new ReadableStream<import("@vibe-box/computer-rpc").ExecEvent>({
             start(c) {
               c.enqueue({ id: "exec-1", seq: 0, name: "exit", code: 0 });
               c.close();

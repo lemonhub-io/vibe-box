@@ -1,5 +1,5 @@
 {
-  "name": "@cloudflare/computer",
+  "name": "@vibe-box/computer",
   "private": true,
   "packageManager": "npm",
   "workspaces": [
@@ -7,6 +7,7 @@
     "packages/rpc",
     "packages/computer",
     "packages/computerd",
+    "packages/mcp",
     "examples/*"
   ],
   "scripts": {

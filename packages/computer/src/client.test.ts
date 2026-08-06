@@ -7,7 +7,7 @@
 // tests use fakes for both paths so the dispatch and the local
 // escaping are pinned without standing up workerd.
 
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 
 import { getWorkspace, type WorkspaceClient } from "./client.js";

@@ -1,4 +1,4 @@
-// Bridge from `@cloudflare/dofs`'s SQLiteWorkspaceProvider to an
+// Bridge from `@vibe-box/dofs`'s SQLiteWorkspaceProvider to an
 // FsClient that isomorphic-git can consume directly.
 //
 // Mirrors the recipe in `examples/think/src/tools/git/vfs.ts`
@@ -20,9 +20,9 @@
 //      fixes the detection.
 //
 // `@platformatic/vfs` is imported lazily so the base
-// `@cloudflare/computer` bundle has no static reference to it.
+// `@vibe-box/computer` bundle has no static reference to it.
 
-import type { SQLiteWorkspaceProvider } from "@cloudflare/dofs";
+import type { SQLiteWorkspaceProvider } from "@vibe-box/dofs";
 
 /**
  * The shape isomorphic-git wants as its `fs` argument: an object
@@ -113,7 +113,7 @@ export async function workspaceIsomorphicGitClient(
     ({ create, VirtualProvider } = await import("@platformatic/vfs"));
   } catch (cause) {
     throw new Error(
-      "@cloudflare/computer/git requires @platformatic/vfs as an optional peer dependency. " +
+      "@vibe-box/computer/git requires @platformatic/vfs as an optional peer dependency. " +
         "Install it, or pass `fs` to clone() explicitly.",
       { cause },
     );

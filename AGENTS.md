@@ -62,11 +62,11 @@ cd node_modules/fuse-native && npx node-gyp rebuild
 
 **Build before you test.** The test scripts don't build the sibling
 packages first. Several suites need build output that is absent in
-a clean checkout: `packages/computerd` imports the sibling `@cloudflare/dofs`
-and `@cloudflare/computer-rpc` packages from their `dist/`
+a clean checkout: `packages/computerd` imports the sibling `@vibe-box/dofs`
+and `@vibe-box/computer-rpc` packages from their `dist/`
 directories, `packages/computerd`'s `src/cli/computerd.test.ts` spawns the bundled
 CLI at `dist/cli/computerd.cjs`, and `examples/think-compare-runtimes`
-imports `@cloudflare/computer/backends/container`, which exists only
+imports `@vibe-box/computer/backends/container`, which exists only
 after the `computer` package is built. Run `npm run build` across the
 npm workspace before `npm test` on a clean checkout.
 
@@ -99,8 +99,8 @@ Then run the package-level tests for whatever you touched:
 
 ```bash
 npm test                                                  # whole workspace
-npm test --workspace @cloudflare/dofs                     # one package
-npm test --workspace @cloudflare/dofs -- src/foo.test.ts  # one file
+npm test --workspace @vibe-box/dofs                     # one package
+npm test --workspace @vibe-box/dofs -- src/foo.test.ts  # one file
 ```
 
 Full details, including typecheck and build commands, are in

@@ -1,4 +1,4 @@
-// End-to-end harness for @cloudflare/computer.
+// End-to-end harness for @vibe-box/computer.
 //
 // Runs inside workerd via @cloudflare/vitest-pool-workers. The
 // surrounding vitest config's globalSetup boots a computerd container

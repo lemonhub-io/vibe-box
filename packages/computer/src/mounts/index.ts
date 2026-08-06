@@ -11,11 +11,11 @@
 // keep the row in 'read-write' while it materialises (otherwise its
 // own mkdir / writeFile calls hit the guard) and flip to the
 // registered mode only after materialize() succeeds. The cache in
-// @cloudflare/dofs is invalidated after every transition so the next
+// @vibe-box/dofs is invalidated after every transition so the next
 // check picks up the new mode.
 
-import type { Database, WorkspaceFilesystem } from "@cloudflare/dofs";
-import { invalidateReadOnlyMountCache, ROOT_INODE } from "@cloudflare/dofs";
+import type { Database, WorkspaceFilesystem } from "@vibe-box/dofs";
+import { invalidateReadOnlyMountCache, ROOT_INODE } from "@vibe-box/dofs";
 
 import type { Mount, MountWriteAPI } from "./types.js";
 
@@ -118,7 +118,7 @@ async function runIndex(opts: IndexerOptions): Promise<void> {
 // Walk vfs_dirents from ROOT_INODE down to the mount root's inode.
 // Returns undefined when any segment is missing or hits a non-dir.
 // Used by the indexer to find the root inode to stamp; we don't
-// reuse resolveInode because it isn't exported from @cloudflare/dofs
+// reuse resolveInode because it isn't exported from @vibe-box/dofs
 // and we don't want to take a dep on its internal symlink-following
 // behaviour for an indexer-only walk.
 function findInodeAt(db: Database, absPath: string): number | undefined {

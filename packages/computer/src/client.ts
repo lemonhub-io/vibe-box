@@ -30,7 +30,7 @@
 // a `TemplateStringsArray`'s `.raw` does not survive structured clone
 // over RPC.
 
-import type { WorkspaceFilesystem } from "@cloudflare/dofs";
+import type { WorkspaceFilesystem } from "@vibe-box/dofs";
 
 import type {
   WorkspaceRuntimeEvent,

@@ -5,7 +5,7 @@
 // behaviour of those two is covered by clone.test.ts and
 // diff.test.ts; what's worth pinning here is the binding contract.
 
-import type { SQLiteWorkspaceProvider } from "@cloudflare/dofs";
+import type { SQLiteWorkspaceProvider } from "@vibe-box/dofs";
 import { describe, expect, it, vi } from "vitest";
 
 import type { IsomorphicGitFSClient } from "./adapter.js";

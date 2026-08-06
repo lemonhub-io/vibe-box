@@ -1,4 +1,4 @@
-# `@cloudflare/computer`
+# `@vibe-box/computer`
 
 > [!IMPORTANT]
 > **PREVIEW ONLY** This package is provided as a preview for feedback only.
@@ -10,7 +10,7 @@
 > The specification in this directory is forward-looking — read it for
 > intent, not as description of the code today.
 
-The `@cloudflare/computer` package provides an out of the box virtual filesystem for use in any Durable Object — it's persistent and backed by SQLite. It's primarily designed for agents that need small, portable filesystems and tools to work with.
+The `@vibe-box/computer` package provides an out of the box virtual filesystem for use in any Durable Object — it's persistent and backed by SQLite. It's primarily designed for agents that need small, portable filesystems and tools to work with.
 
 ![Architecture overview](./assets/arch.png)
 
@@ -22,7 +22,7 @@ It provides:
  - Pluggable execution backends selected through `workspace.runtime`: a Cloudflare Container shell, a just-bash Dynamic Worker, or an isolated ECMAScript-module Dynamic Worker.
  - Isolated JavaScript with structured input/results, durable relative imports, configured libraries, durable `node:fs/promises`, trusted `ws:git` / `ws:artifacts`, and managed execution records.
  - Workspace constructable without a backend, for filesystem-only use cases.
- - Out-of-the-box AI SDK tools for `@cloudflare/agents` through `@cloudflare/computer/tools`.
+ - Out-of-the-box AI SDK tools for `@cloudflare/agents` through `@vibe-box/computer/tools`.
 
 It comes with the following limitations:
 
@@ -35,25 +35,25 @@ It comes with the following limitations:
 Install the package into your Worker/Agent project:
 
 ```sh
-npm install @cloudflare/computer
+npm install @vibe-box/computer
 ```
 
 The package ships several entrypoints:
 
 | Entrypoint | Purpose |
 | --- | --- |
-| `@cloudflare/computer` | The Workspace facade, first-class `workspace.runtime`, stub types, the R2 mount, and proxy classes. |
-| `@cloudflare/computer/backends/container` | `CloudflareContainerBackend` and `withWorkspaceContainer`. Pulls in the computerd / capnweb sync plumbing. |
-| `@cloudflare/computer/backends/worker-shell` | `WorkerShellBackend` and the bundled just-bash command runtime. |
-| `@cloudflare/computer/backends/worker-javascript` | `WorkerJavaScriptBackend`, configured libraries, durable relative imports, `node:fs/promises`, and trusted `ws:git` / `ws:artifacts`. |
-| `@cloudflare/computer/git` | Opt-in isomorphic-git glue for working with checkouts inside the workspace. Bundled lazily, with `pako` replaced by Workers `node:zlib`, and kept out of the default `@cloudflare/computer` graph. |
-| `@cloudflare/computer/artifacts` | `createArtifact`, a session-scoped facade over the Cloudflare Artifacts Workers binding, plus its argv CLI. |
-| `@cloudflare/computer/tools` | AI SDK tools for agents: read, write, edit, ls, optional exec, and optional publish. |
+| `@vibe-box/computer` | The Workspace facade, first-class `workspace.runtime`, stub types, the R2 mount, and proxy classes. |
+| `@vibe-box/computer/backends/container` | `CloudflareContainerBackend` and `withWorkspaceContainer`. Pulls in the computerd / capnweb sync plumbing. |
+| `@vibe-box/computer/backends/worker-shell` | `WorkerShellBackend` and the bundled just-bash command runtime. |
+| `@vibe-box/computer/backends/worker-javascript` | `WorkerJavaScriptBackend`, configured libraries, durable relative imports, `node:fs/promises`, and trusted `ws:git` / `ws:artifacts`. |
+| `@vibe-box/computer/git` | Opt-in isomorphic-git glue for working with checkouts inside the workspace. Bundled lazily, with `pako` replaced by Workers `node:zlib`, and kept out of the default `@vibe-box/computer` graph. |
+| `@vibe-box/computer/artifacts` | `createArtifact`, a session-scoped facade over the Cloudflare Artifacts Workers binding, plus its argv CLI. |
+| `@vibe-box/computer/tools` | AI SDK tools for agents: read, write, edit, ls, optional exec, and optional publish. |
 
 A consumer that only uses the container backend never imports the
 worker subpath, so the just-bash payload tree-shakes away.
 
-Wire types shared with the in-container service live in the sibling package `@cloudflare/computer-rpc` (subpaths `./server`, `./client`, `./driver`).
+Wire types shared with the in-container service live in the sibling package `@vibe-box/computer-rpc` (subpaths `./server`, `./client`, `./driver`).
 
 ### Sandbox container image
 
@@ -63,7 +63,7 @@ copies the prebuilt binary out of the public GHCR image and into a thin
 Debian base:
 
 ```dockerfile
-FROM ghcr.io/cloudflare/computer-computerd-linux-x64:0.1.0-alpha.1 AS computerd
+FROM ghcr.io/lemonhub-io/computer-computerd-linux-x64:0.1.0-alpha.1 AS computerd
 
 FROM debian:stable-slim
 
@@ -83,7 +83,7 @@ ENTRYPOINT ["/usr/local/bin/computerd"]
 ```
 
 To build the binary from source instead, run `npm run build:bin
---workspace @cloudflare/computerd`, which emits
+--workspace @vibe-box/computerd`, which emits
 `artifacts/computerd/computerd-linux-x64`, then `COPY` that into the
 image.
 
@@ -92,11 +92,11 @@ image.
 ## Example
 
 ```ts
-import { Workspace } from "@cloudflare/computer";
+import { Workspace } from "@vibe-box/computer";
 import {
   CloudflareContainerBackend,
   withWorkspaceContainer,
-} from "@cloudflare/computer/backends/container";
+} from "@vibe-box/computer/backends/container";
 import { DurableObject } from "cloudflare:workers";
 
 export class Agent extends withWorkspaceContainer(class extends DurableObject<Env> {}) {

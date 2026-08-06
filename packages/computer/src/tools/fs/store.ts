@@ -14,7 +14,7 @@
 import type { FileStat, FileStore } from "./types.js";
 
 /**
- * Structural subset of `@cloudflare/computer.Workspace` the tools
+ * Structural subset of `@vibe-box/computer.Workspace` the tools
  * depend on.
  */
 export interface WorkspaceLike {

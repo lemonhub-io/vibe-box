@@ -18,7 +18,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 
-import { type Database, stat } from "@cloudflare/dofs";
+import { type Database, stat } from "@vibe-box/dofs";
 
 import { createLog, type EventLog, openLog } from "./log.js";
 import { clearExecState, initializeExecSchema } from "./schema.js";

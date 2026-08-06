@@ -31,7 +31,7 @@ client ─► Worker /c/<name>/{file,exec}
 ```
 
 1. The DO constructs a `WorkerShellBackend` from
-   `@cloudflare/computer/backends/worker-shell`, passing the Loader
+   `@vibe-box/computer/backends/worker-shell`, passing the Loader
    binding, a `{binding, id}` reference to itself, and `ctx`.
    The backend handles the rest internally: it builds the Loader
    callback (with the code-split shell modules + the seek-bzip
@@ -47,7 +47,7 @@ client ─► Worker /c/<name>/{file,exec}
    survive structured clone into the loader's env; the
    binding-shape Fetcher the proxy produces does.
 3. `ShellWorker` (shipped in
-   `@cloudflare/computer/backends/worker-shell`) lives inside that
+   `@vibe-box/computer/backends/worker-shell`) lives inside that
    Dynamic Worker. Each `exec(input)` calls
    `env.HOST.getWorkspace()`, builds a fresh `Bash` around a
    `WorkspaceFsAdapter` wrapping the stub's `.fs`, runs the
@@ -103,7 +103,7 @@ POST /c/<name>/exec                    { command | argv, cwd?, encoding? }
 
 No Docker, no extra build step. The shell ships as a record of
 pre-bundled modules (`SHELL_MODULES`) inside
-`@cloudflare/computer/backends/worker-shell`; `WorkerShellBackend` spreads
+`@vibe-box/computer/backends/worker-shell`; `WorkerShellBackend` spreads
 the whole record into the Loader callback internally so the DO
 constructor stays a three-line backend invocation. The entry
 module parses on cold start; the dynamic chunks (python, js-exec,
@@ -138,7 +138,7 @@ examples/worker-shell/
 ```
 
 Nothing else. The Dynamic Worker source ships from
-`@cloudflare/computer/backends/worker-shell` as a pre-built module
+`@vibe-box/computer/backends/worker-shell` as a pre-built module
 string.
 
 ## Known limitations

@@ -1,17 +1,17 @@
+import { getSandbox, type Sandbox as SandboxDO } from "@cloudflare/sandbox";
+import { type ChunkContext, type StepContext, Think } from "@cloudflare/think";
 import {
   type DurableObjectStorageLike,
   Workspace,
   WorkspaceProxy,
   WorkspaceServiceProxy,
   type WorkspaceStub,
-} from "@cloudflare/computer";
-import { CloudflareContainerBackend } from "@cloudflare/computer/backends/container";
+} from "@vibe-box/computer";
+import { CloudflareContainerBackend } from "@vibe-box/computer/backends/container";
 import {
   WorkerShellBackend,
   type WorkerShellBackendOptions,
-} from "@cloudflare/computer/backends/worker-shell";
-import { getSandbox, type Sandbox as SandboxDO } from "@cloudflare/sandbox";
-import { type ChunkContext, type StepContext, Think } from "@cloudflare/think";
+} from "@vibe-box/computer/backends/worker-shell";
 import type { ToolSet } from "ai";
 import { getServerByName } from "partyserver";
 import type { ExecutionTarget, RunEventKind, RuntimeId } from "../../shared/events";

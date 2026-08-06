@@ -11,7 +11,7 @@ get a URL.
 The Durable Object runs the prompt through a Workers AI
 text-to-image model, writes the generated PNG into its `Workspace`,
 then uploads that file to R2 and returns a presigned URL through
-[`@cloudflare/computer/assets`](../../docs/14_assets_interface.md).
+[`@vibe-box/computer/assets`](../../docs/14_assets_interface.md).
 
 > [!NOTE]
 > This is a **production-only** example. The presigner needs R2 S3

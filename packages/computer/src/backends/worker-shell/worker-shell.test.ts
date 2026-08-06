@@ -18,7 +18,7 @@
 // hands out, producing the same NDJSON byte frames the shell
 // package's Runner would.
 
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 
 import type { BackendHandle, WorkspaceBackend } from "../../backend.js";

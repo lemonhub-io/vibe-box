@@ -1,6 +1,6 @@
-# Cloudflare Computer
+# Vibe Box
 
-Cloudflare Computer is a virtual filesystem that lives inside a
+Vibe Box is a virtual filesystem that lives inside a
 Durable Object. The Durable Object holds the authoritative state in
 SQLite and exposes one pluggable execution surface through
 `workspace.runtime`. Three backends ship today:
@@ -37,8 +37,8 @@ callers the filesystem on its own.
 
 ## Using it
 
-If you want to build on Cloudflare Computer, install
-[`@cloudflare/computer`](packages/computer/README.md) and follow that
+If you want to build on Vibe Box, install
+[`@vibe-box/computer`](packages/computer/README.md) and follow that
 package's README — it has the installation steps, the entrypoint map,
 and worked examples of the `fs` and `runtime` surfaces.
 
@@ -74,25 +74,28 @@ public surface. Each is a Worker workspace with its own README.
   clone-ready repo.
 - [`examples/assets`](examples/assets) — turns a prompt into an image with
   Workers AI, writes it to the workspace, and returns a shareable link
-  through `@cloudflare/computer/assets`.
+  through `@vibe-box/computer/assets`.
 
 ## Repository layout
 
 The repo is a small monorepo. Each package has its own README with
 package-specific status and usage notes.
 
-- [`packages/dofs`](packages/dofs/README.md) (`@cloudflare/dofs`) —
+- [`packages/dofs`](packages/dofs/README.md) (`@vibe-box/dofs`) —
   Durable Object SQLite-backed virtual filesystem, sync protocol
   building blocks, and a `@platformatic/vfs` provider for Node.
 - [`packages/rpc`](packages/rpc/README.md)
-  (`@cloudflare/computer-rpc`) — capnweb wire types and
+  (`@vibe-box/computer-rpc`) — capnweb wire types and
   server/client helpers shared between the Durable Object and `computerd`.
 - [`packages/computerd`](packages/computerd/README.md)
-  (`@cloudflare/computerd`) — the `computerd` daemon: a FUSE mount plus
+  (`@vibe-box/computerd`) — the `computerd` daemon: a FUSE mount plus
   HTTP/WebSocket RPC server that runs inside the sandbox container.
 - [`packages/computer`](packages/computer/README.md)
-  (`@cloudflare/computer`) — the top-level Computer package
+  (`@vibe-box/computer`) — the top-level Vibe Box package
   consumed by Durable Objects. Work in progress.
+- [`packages/mcp`](packages/mcp/README.md)
+  (`@vibe-box/mcp`) — MCP server: streamable-HTTP tools on a
+  Durable Object plus a local stdio proxy for any MCP client.
 - [`packages/computer-computerd-linux-x64`](packages/computer-computerd-linux-x64/README.md)
   — private Docker image context for the prebuilt `computerd` linux-x64
   binary. The image, not an npm package, is the release artifact.

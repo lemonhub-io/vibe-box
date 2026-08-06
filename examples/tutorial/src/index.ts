@@ -17,18 +17,18 @@
 //
 // README.md walks through building this file from an empty directory.
 
+import { Think } from "@cloudflare/think";
 import {
   type DurableObjectStorageLike,
   type ThinkWorkspaceCompatibility,
   Workspace,
   WorkspaceProxy,
-} from "@cloudflare/computer";
-import { createAssets } from "@cloudflare/computer/assets";
+} from "@vibe-box/computer";
+import { createAssets } from "@vibe-box/computer/assets";
 import {
   CloudflareContainerBackend,
   withWorkspaceContainer,
-} from "@cloudflare/computer/backends/container";
-import { Think } from "@cloudflare/think";
+} from "@vibe-box/computer/backends/container";
 import { getAgentByName } from "agents";
 
 // Carries container egress back to the durable object. The runtime

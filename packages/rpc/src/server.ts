@@ -20,7 +20,7 @@ import {
   readWatermark,
   stageBlob,
   writeFetchCursor,
-} from "@cloudflare/dofs";
+} from "@vibe-box/dofs";
 import { newWebSocketRpcSession, nodeHttpBatchRpcResponse, RpcTarget } from "capnweb";
 
 import { trackStub, untrackStub } from "./debug.js";

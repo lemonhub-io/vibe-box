@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Build the computerd-linux-x64 SEA binary, stage it into the platform
 // package, and produce a docker image that downstream Dockerfiles
-// can `COPY --from`. Tagged `cloudflare/computer-computerd-linux-x64`
+// can `COPY --from`. Tagged `lemonhub-io/computer-computerd-linux-x64`
 // (matching the npm package name so consumers don't have to
 // remember a second identifier) at both the source-of-truth
 // version and `latest`.
@@ -25,7 +25,7 @@ const platformDir = resolve(repoRoot, "packages/computer-computerd-linux-x64");
 
 const { version } = JSON.parse(readFileSync(resolve(computerdRoot, "package.json"), "utf8"));
 
-const IMAGE = "cloudflare/computer-computerd-linux-x64";
+const IMAGE = "lemonhub-io/computer-computerd-linux-x64";
 const push = process.argv.includes("--push");
 
 // 1. Build the SEA binary.

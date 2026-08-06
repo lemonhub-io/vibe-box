@@ -1,7 +1,7 @@
 node_modules/
 dist/
 PLAN.md
-# Build output at the repo root only. The @cloudflare/computer
+# Build output at the repo root only. The @vibe-box/computer
 # Artifacts source tree (packages/computer/src/artifacts/) is real,
 # tracked code and must not be caught by this rule.
 /artifacts/
@@ -12,7 +12,7 @@ PLAN.md
 packages/computer/src/backends/worker-shell/generated-bundle.ts
 
 # SEA binary destinations populated at publish time from
-# artifacts/computerd/ via the build-bin step. The @cloudflare/computer
+# artifacts/computerd/ via the build-bin step. The @vibe-box/computer
 # copy lives under dist/bin/, which is already covered by the
 # blanket dist/ rule above; listed here for discoverability.
 packages/computer-computerd-*/bin/computerd

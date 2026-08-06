@@ -21,13 +21,13 @@ function isStable(version) {
 
 function computerdImageTags(version) {
   const tags = [
-    `ghcr.io/cloudflare/computer-computerd-linux-x64:${version}`,
+    `ghcr.io/lemonhub-io/computer-computerd-linux-x64:${version}`,
     `registry.cloudflare.com/library/computer-computerd-linux-x64:${version}`,
   ];
 
   if (isStable(version)) {
     tags.push(
-      "ghcr.io/cloudflare/computer-computerd-linux-x64:latest",
+      "ghcr.io/lemonhub-io/computer-computerd-linux-x64:latest",
       "registry.cloudflare.com/library/computer-computerd-linux-x64:latest",
     );
   }
@@ -62,10 +62,10 @@ const missingTags = tags.filter((tag) => !imageExists(tag));
 if (missingTags.length === 0) {
   console.log(`computerd image ${version} already exists in both registries; skipping image build`);
 } else {
-  console.log(`publishing computerd image for @cloudflare/computerd@${version}`);
+  console.log(`publishing computerd image for @vibe-box/computerd@${version}`);
   console.log(`missing tag(s): ${missingTags.join(", ")}`);
 
-  run("npm", ["run", "build:bin", "--workspace", "@cloudflare/computerd"]);
+  run("npm", ["run", "build:bin", "--workspace", "@vibe-box/computerd"]);
   stageComputerdBinary();
 
   const tagArgs = tags.flatMap((tag) => ["--tag", tag]);

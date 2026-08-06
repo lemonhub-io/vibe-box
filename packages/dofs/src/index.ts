@@ -33,7 +33,7 @@ export { initializeSchema, ROOT_INODE, SCHEMA_VERSION } from "./schema/index.js"
 export { Database } from "./storage.js";
 export type { ApplyOptions, ApplyResult, SkippedEntry } from "./sync/apply.js";
 // Sync protocol building blocks. The wire wiring lives in
-// @cloudflare/computer-rpc; these are the helpers that wiring binds
+// @vibe-box/computer-rpc; these are the helpers that wiring binds
 // to a Database.
 export { applyChanges, applyChangesSync } from "./sync/apply.js";
 export { stageBlob } from "./sync/blobs.js";
@@ -59,7 +59,7 @@ export {
 export type { ExecutedStatement } from "./testing-recording.js";
 // RecordingStorage is workerd-safe (pure JS). SQLiteTestStorage
 // wraps node:sqlite and must be imported from
-// '@cloudflare/dofs/testing' under node-only call sites.
+// '@vibe-box/dofs/testing' under node-only call sites.
 export { RecordingStorage } from "./testing-recording.js";
 export type {
   DurableObjectStorageLike,

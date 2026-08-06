@@ -1,0 +1,41 @@
+{
+  // Example: Worker + Durable Object exposing a Workspace through the
+  // MCP protocol. The DO holds the authoritative SQLite filesystem;
+  // the /mcp route speaks MCP streamable HTTP, gated by a bearer
+  // token.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vibe-box-mcp-example",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-05-26",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "MCP_DO",
+        "class_name": "MCPDo"
+      }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["MCPDo"]
+    }
+  ],
+
+  // Default workspace name; the /mcp route falls back to this when the
+  // request carries no ?workspace=<name> query parameter. Every
+  // distinct name is a separate, isolated Durable Object with its own
+  // SQLite filesystem.
+  "vars": {
+    "MCP_WORKSPACE": "default"
+  }
+
+  // MCP_TOKEN is a secret, set before deploy:
+  //   wrangler secret put MCP_TOKEN
+  // Without it the /mcp route refuses everything with 401.
+  // CI injects it through `wrangler secret bulk` (see
+  // .github/workflows/deploy-mcp.yml).
+}
