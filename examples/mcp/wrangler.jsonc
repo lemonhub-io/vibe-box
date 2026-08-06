@@ -25,14 +25,17 @@
     }
   ],
 
-  // Which workspace instance name the worker routes /mcp to. The DO
-  // is addressed by name, so several workspaces can coexist behind
-  // one worker; the local proxy picks one with --workspace.
+  // Default workspace name; the /mcp route falls back to this when the
+  // request carries no ?workspace=<name> query parameter. Every
+  // distinct name is a separate, isolated Durable Object with its own
+  // SQLite filesystem.
   "vars": {
     "MCP_WORKSPACE": "default"
   }
 
-  // Set the shared secret before deploy:
+  // MCP_TOKEN is a secret, set before deploy:
   //   wrangler secret put MCP_TOKEN
   // Without it the /mcp route refuses everything with 401.
+  // CI injects it through `wrangler secret bulk` (see
+  // .github/workflows/deploy-mcp.yml).
 }

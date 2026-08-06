@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import type { McpEnv } from "./route.js";
-import { routeMcp } from "./route.js";
+import { routeMcp, workspaceName } from "./route.js";
 
 function makeEnv(overrides: Partial<{ token: string; workspace: string }> = {}) {
   const doFetch = vi.fn(async () => new Response("do-response"));
@@ -21,6 +21,20 @@ function makeEnv(overrides: Partial<{ token: string; workspace: string }> = {}) 
     doFetch,
   };
 }
+
+describe("workspaceName", () => {
+  it("returns the workspace query parameter", () => {
+    expect(workspaceName(new Request("https://example.com/mcp?workspace=alpha"))).toBe("alpha");
+  });
+
+  it("returns null without the parameter", () => {
+    expect(workspaceName(new Request("https://example.com/mcp"))).toBeNull();
+  });
+
+  it("returns null for an empty parameter", () => {
+    expect(workspaceName(new Request("https://example.com/mcp?workspace="))).toBeNull();
+  });
+});
 
 describe("routeMcp", () => {
   it("returns 404 for non-/mcp paths", async () => {
@@ -50,8 +64,8 @@ describe("routeMcp", () => {
     expect(response.status).toBe(401);
   });
 
-  it("forwards authorized requests to the named workspace DO", async () => {
-    const { env, doFetch } = makeEnv({ workspace: "my-ws" });
+  it("forwards authorized requests to the default workspace DO", async () => {
+    const { env, doFetch } = makeEnv({ workspace: "default" });
     const request = new Request("https://example.com/mcp", {
       method: "POST",
       headers: { authorization: "Bearer secret" },
@@ -59,6 +73,17 @@ describe("routeMcp", () => {
     const response = await routeMcp(request, env);
     expect(response.status).toBe(200);
     expect(await response.text()).toBe("do-response");
+    expect(doFetch).toHaveBeenCalledWith(request);
+  });
+
+  it("routes to the workspace named by the query parameter", async () => {
+    const { env, doFetch } = makeEnv({ workspace: "default" });
+    const request = new Request("https://example.com/mcp?workspace=alpha", {
+      method: "POST",
+      headers: { authorization: "Bearer secret" },
+    });
+    const response = await routeMcp(request, env);
+    expect(response.status).toBe(200);
     expect(doFetch).toHaveBeenCalledWith(request);
   });
 });

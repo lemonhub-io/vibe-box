@@ -112,7 +112,7 @@ jobs:
             workspace: "@vibe-box/example-think"
             path: examples/think
           - name: container
-            workspace: "@example/computer-container"
+            workspace: "@example/vibe-container"
             path: examples/container
     steps:
       - uses: actions/checkout@v6

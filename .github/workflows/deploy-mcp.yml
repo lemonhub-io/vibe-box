@@ -1,0 +1,80 @@
+# Deploy the MCP example worker to Cloudflare.
+#
+# Runs on push to main and dev (and manually via workflow_dispatch).
+# Requires three repository secrets:
+#
+#   CLOUDFLARE_API_TOKEN  API token with Workers Scripts:Edit and
+#                         Account Settings:Read permissions on the
+#                         account that owns the zone/worker.
+#   CLOUDFLARE_ACCOUNT_ID The numeric account id of that account.
+#   MCP_TOKEN             The bearer token MCP clients must present;
+#                         the worker's /mcp route rejects requests
+#                         without `Authorization: Bearer <MCP_TOKEN>`.
+#
+# The deploy skips when the worker sources (examples/mcp) are
+# unchanged, to keep pushes to unrelated files from churning a
+# deployment.
+
+name: Deploy MCP worker
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "examples/mcp/**"
+      - "packages/mcp/**"
+      - "packages/computer/**"
+      - "packages/dofs/**"
+      - "packages/rpc/**"
+      - ".github/workflows/deploy-mcp.yml"
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-mcp-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: mcp-worker
+      url: https://vibe-box-mcp-example.${{ vars.CF_WORKERS_SUBDOMAIN }}.workers.dev/mcp
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: ./.github/actions/install
+
+      # Examples consume the monorepo packages via local symlinks, so
+      # every package's dist/ has to exist before the worker builds.
+      - name: Build all workspaces
+        run: npm run build --workspaces --if-present
+
+      - name: Lint + format check
+        run: npx biome check packages/mcp examples/mcp
+
+      - name: Test
+        run: npm test --workspace @vibe-box/mcp --workspace @example/vibe-mcp
+
+      - name: Deploy worker
+        run: npx wrangler deploy
+        working-directory: examples/mcp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Set MCP_TOKEN secret
+        run: |
+          echo "{\"MCP_TOKEN\":\"$MCP_TOKEN\"}" | npx wrangler secret bulk
+        working-directory: examples/mcp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MCP_TOKEN: ${{ secrets.MCP_TOKEN }}
