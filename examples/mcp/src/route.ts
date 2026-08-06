@@ -9,6 +9,7 @@ export interface McpEnv {
   MCP_TOKEN: string;
   MCP_WORKSPACE: string;
   MCP_DO: DurableObjectNamespace;
+  LOADER: WorkerLoader;
 }
 
 /** The workspace name a request targets, or null to use the default. */
