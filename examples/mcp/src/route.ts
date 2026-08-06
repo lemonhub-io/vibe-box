@@ -12,10 +12,15 @@ export interface McpEnv {
   LOADER: WorkerLoader;
 }
 
+/** Workspace names are DO ids; keep them tame. */
+const WORKSPACE_NAME_RE = /^[a-zA-Z0-9_-]{1,63}$/;
+
 /** The workspace name a request targets, or null to use the default. */
 export function workspaceName(request: Request): string | null {
   const value = new URL(request.url).searchParams.get("workspace");
-  return value !== null && value.length > 0 ? value : null;
+  if (value === null || value.length === 0) return null;
+  if (!WORKSPACE_NAME_RE.test(value)) return null;
+  return value;
 }
 
 export async function routeMcp(request: Request, env: McpEnv): Promise<Response> {

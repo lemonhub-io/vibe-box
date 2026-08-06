@@ -49,9 +49,7 @@ export interface McpWorkspace {
         env?: Record<string, string>;
         input?: JsonValue;
       },
-    ): Promise<{
-      result(): Promise<{ exitCode: number; stdout: string; stderr: string; value?: unknown }>;
-    }>;
+    ): Promise<ExecHandle>;
   };
   assets?: {
     share(path: string, options: { expiresAfter: number; prefix?: string }): Promise<string>;
@@ -89,6 +87,56 @@ function encode(textValue: string): Uint8Array {
 }
 
 const DEFAULT_MAX_EDIT_BYTES = 2 * 1024 * 1024;
+const DEFAULT_READ_MAX_BYTES = 1024 * 1024;
+const DEFAULT_EXEC_TIMEOUT_MS = 60 * 1000;
+
+interface ExecHandle {
+  result(): Promise<{ exitCode: number; stdout: string; stderr: string; value?: unknown }>;
+  kill?(): Promise<void>;
+}
+
+/**
+ * Drain an exec handle's result, killing the command if it has not
+ * settled within `timeoutMs`. Backends without a kill handle run
+ * unguarded.
+ */
+async function execWithTimeout(
+  handle: ExecHandle,
+  timeoutMs: number,
+  command: string,
+): Promise<{ exitCode: number; stdout: string; stderr: string; value?: unknown }> {
+  const result = handle.result();
+  if (handle.kill === undefined) return result;
+  return Promise.race([
+    result,
+    new Promise<{ exitCode: number; stdout: string; stderr: string }>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error(`Command timed out after ${timeoutMs}ms: ${command}`));
+        void handle.kill!().catch(() => {});
+      }, timeoutMs);
+    }),
+  ]);
+}
+
+/**
+ * Read a file, capping the returned text at `maxBytes`. The whole
+ * file is still read from the workspace so callers can tell a
+ * truncation from a read error; only the MCP response is capped.
+ */
+async function readCapped(
+  ws: McpWorkspace,
+  path: string,
+  maxBytes: number,
+): Promise<McpToolResult> {
+  const bytes = await readAll(await ws.fs.readFile(path));
+  if (bytes.byteLength > maxBytes) {
+    const kept = decode(bytes.slice(0, maxBytes));
+    return text(
+      `${kept}\n\n[truncated: file is ${bytes.byteLength} bytes; showing the first ${maxBytes}]`,
+    );
+  }
+  return text(decode(bytes));
+}
 
 /**
  * Apply one exact replacement to a file, matching the AI edit tool's
@@ -142,12 +190,11 @@ async function applyEdit(
 export function registerTools(server: McpServer, workspace: McpWorkspace): void {
   server.tool(
     "read",
-    "Read a file from the workspace and return its full contents as text.",
+    "Read a file from the workspace and return its contents as text. Files larger than 1 MiB are truncated with a marker.",
     { path: z.string().describe("Absolute workspace path, e.g. /workspace/src/index.ts.") },
     async ({ path }) => {
       try {
-        const bytes = await readAll(await workspace.fs.readFile(path));
-        return text(decode(bytes));
+        return await readCapped(workspace, path, DEFAULT_READ_MAX_BYTES);
       } catch (err) {
         if (isEnoent(err)) return text(`No such file: ${path}.`, true);
         return text(err instanceof Error ? err.message : String(err), true);
@@ -221,11 +268,21 @@ export function registerTools(server: McpServer, workspace: McpWorkspace): void 
       {
         command: z.string().describe("Shell command to run."),
         cwd: z.string().optional().describe("Working directory inside the workspace."),
+        timeoutMs: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe("Kill the command after this many milliseconds. Defaults to 60 seconds."),
       },
-      async ({ command, cwd }) => {
+      async ({ command, cwd, timeoutMs }) => {
         try {
           const handle = await workspace.runtime!.exec(command, { encoding: "utf8", cwd });
-          const result = await handle.result();
+          const result = await execWithTimeout(
+            handle,
+            timeoutMs ?? DEFAULT_EXEC_TIMEOUT_MS,
+            command,
+          );
           const parts = [`exit ${result.exitCode}`];
           if (result.stdout) parts.push(result.stdout);
           if (result.stderr) parts.push(`stderr: ${result.stderr}`);

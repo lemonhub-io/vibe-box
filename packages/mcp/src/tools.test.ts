@@ -9,6 +9,7 @@ import { createMcpServer } from "./server.js";
 // MCP tools operate on. Writes land in a Map; reads come back from it.
 class StubWorkspace {
   files = new Map<string, Uint8Array>();
+  resolveHang?: () => void;
   assets?: { share(path: string, options: { expiresAfter: number }): Promise<string> };
   runtime = {
     exec: async (command: string, options: { cwd?: string }) => {
@@ -19,6 +20,17 @@ class StubWorkspace {
             stdout: "",
             stderr: `command failed: ${command}`,
           }),
+        };
+      }
+      if (command === "hang") {
+        return {
+          result: () =>
+            new Promise((resolve) => {
+              this.resolveHang = () => resolve({ exitCode: 137, stdout: "", stderr: "killed" });
+            }),
+          kill: async () => {
+            this.resolveHang?.();
+          },
         };
       }
       const out = `ran: ${command}${options.cwd ? ` (cwd ${options.cwd})` : ""}`;
@@ -166,6 +178,31 @@ describe("createMcpServer", () => {
     const exec = await client.callTool({ name: "exec", arguments: { command: "boom" } });
     const text = (exec.content as Array<{ type: string; text?: string }>)[0].text ?? "";
     expect(text).toContain("command failed: boom");
+  });
+
+  it("kills a command that exceeds the exec timeout", async () => {
+    const ws = new StubWorkspace();
+    const client = await connectClient(ws);
+    const exec = await client.callTool({
+      name: "exec",
+      arguments: { command: "hang", timeoutMs: 50 },
+    });
+    expect(exec.isError).toBe(true);
+    const text = (exec.content as Array<{ type: string; text?: string }>)[0].text ?? "";
+    expect(text).toContain("timed out after 50ms");
+    expect(text).toContain("hang");
+  });
+
+  it("truncates reads of large files with a marker", async () => {
+    const ws = new StubWorkspace();
+    // Just over the 1 MiB read cap.
+    const big = "x".repeat(1024 * 1024 + 17);
+    ws.files.set("/workspace/big.txt", new TextEncoder().encode(big));
+    const client = await connectClient(ws);
+    const read = await client.callTool({ name: "read", arguments: { path: "/workspace/big.txt" } });
+    const text = (read.content as Array<{ type: string; text?: string }>)[0].text ?? "";
+    expect(read.isError).toBeFalsy();
+    expect(text).toContain("[truncated: file is");
   });
 
   it("publishes through the assets client", async () => {

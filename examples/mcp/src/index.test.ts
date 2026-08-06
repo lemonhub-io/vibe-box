@@ -34,6 +34,13 @@ describe("workspaceName", () => {
   it("returns null for an empty parameter", () => {
     expect(workspaceName(new Request("https://example.com/mcp?workspace="))).toBeNull();
   });
+
+  it("returns null for a name with disallowed characters", () => {
+    expect(
+      workspaceName(new Request("https://example.com/mcp?workspace=../etc/passwd")),
+    ).toBeNull();
+    expect(workspaceName(new Request("https://example.com/mcp?workspace=has space"))).toBeNull();
+  });
 });
 
 describe("routeMcp", () => {
