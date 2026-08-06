@@ -26,7 +26,7 @@ client ─► Worker /c/<name>/{file,exec}
 ```
 
 1. The DO constructs a `CloudflareContainerBackend` from
-   `@cloudflare/computer/backends/container` and hands it to a
+   `@vibe-box/computer/backends/container` and hands it to a
    `Workspace` instance. That backend owns the entire computerd lifecycle:
    container start,
    outbound egress interception, port-readiness polling, POST
@@ -37,7 +37,7 @@ client ─► Worker /c/<name>/{file,exec}
    …)`, set up by the backend). The DO passes
    `ctx.exports.WorkspaceProxy({ props: { binding, id } })` as the
    egress fetcher; that `WorkerEntrypoint` (re-exported from
-   `@cloudflare/computer`) routes `/ws` upgrades back to the owning DO.
+   `@vibe-box/computer`) routes `/ws` upgrades back to the owning DO.
 3. When `Workspace.ready()` is called for the first time, the
    backend posts `/connect` into computerd with
    `{ url: "http://computer.internal" }`. computerd polls
@@ -128,7 +128,7 @@ POST /c/<name>/exec                    { command | argv, cwd?, encoding? }
 The Worker enables Cloudflare's built-in tracing in
 `wrangler.jsonc` (`observability.traces.enabled = true`) and wires
 the workspace observer to `ctx.tracing` via the
-`@cloudflare/computer/observe/cloudflare` adapter. Every workspace
+`@vibe-box/computer/observe/cloudflare` adapter. Every workspace
 operation (`workspace.connect`, `workspace.sync.push`,
 `workspace.sync.pull`, `workspace.runtime.exec`, and the
 `workspace.fs.*` family) opens a span on the runtime, so the
@@ -143,7 +143,7 @@ required in this example.
 ## Run it locally
 
 Requires Docker. The Dockerfile pulls
-`ghcr.io/cloudflare/computer-computerd-linux-x64:<version>` from the
+`ghcr.io/lemonhub-io/computer-computerd-linux-x64:<version>` from the
 public GitHub Container Registry on first build, so no local image
 prep is needed.
 

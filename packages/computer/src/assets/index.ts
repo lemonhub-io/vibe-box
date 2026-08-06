@@ -1,11 +1,11 @@
-// Public surface of @cloudflare/computer/assets.
+// Public surface of @vibe-box/computer/assets.
 //
 // `createAssets({ ws, bucket, s3 })` binds a workspace and an R2
 // bucket once and returns a client whose `share(path, opts)`
 // uploads a VFS file to R2 and returns a time-limited presigned
 // GET URL.
 //
-//   import { createAssets } from "@cloudflare/computer/assets";
+//   import { createAssets } from "@vibe-box/computer/assets";
 //
 //   const assets = createAssets({ ws, bucket: env.ASSETS, s3: { bucket: "agent-assets" } });
 //   const url = await assets.share("/workspace/out/image.png", {

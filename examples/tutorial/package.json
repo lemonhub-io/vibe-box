@@ -1,9 +1,9 @@
 {
-  "name": "@example/computer-tutorial",
+  "name": "@example/vibe-tutorial",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Tutorial Worker where a Think agent looks up a recipe, renders a markdown card, and converts it to a PDF with pandoc in a @cloudflare/computer container.",
+  "description": "Tutorial Worker where a Think agent looks up a recipe, renders a markdown card, and converts it to a PDF with pandoc in a @vibe-box/computer container.",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
@@ -11,8 +11,8 @@
     "build:types": "wrangler types --env-file=.env.example"
   },
   "dependencies": {
-    "@cloudflare/computer": "*",
     "@cloudflare/think": "^0.15.1",
+    "@vibe-box/computer": "*",
     "agents": "^0.20.0",
     "ai": "^7.0.0",
     "zod": "^4.4.3"

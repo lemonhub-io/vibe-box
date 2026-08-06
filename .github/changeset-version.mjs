@@ -5,7 +5,7 @@
 //
 // Changesets owns package versions and changelogs, including private
 // packages (`privatePackages.version` is enabled in .changeset/config.json).
-// The linux-x64 image context is derivative of @cloudflare/computerd, not a
+// The linux-x64 image context is derivative of @vibe-box/computerd, not a
 // changeset target, so this script copies computerd's version into that
 // package.json and updates Dockerfile/docs image pins to the same version.
 

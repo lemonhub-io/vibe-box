@@ -4,16 +4,16 @@ import { mkdir } from "node:fs/promises";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import type { Socket } from "node:net";
 import { isAbsolute } from "node:path";
-import type { ExecEvent as RpcExecEvent } from "@cloudflare/computer-rpc";
-import { createWorkspaceClient, type WorkspaceClient } from "@cloudflare/computer-rpc/client";
-import { isStubTrackingEnabled, stubSnapshot } from "@cloudflare/computer-rpc/debug";
-import type { RunnerLike } from "@cloudflare/computer-rpc/server";
+import type { ExecEvent as RpcExecEvent } from "@vibe-box/computer-rpc";
+import { createWorkspaceClient, type WorkspaceClient } from "@vibe-box/computer-rpc/client";
+import { isStubTrackingEnabled, stubSnapshot } from "@vibe-box/computer-rpc/debug";
+import type { RunnerLike } from "@vibe-box/computer-rpc/server";
 import {
   acceptWebSocketSession,
   createWorkspaceServer,
   serveHTTPBatch,
-} from "@cloudflare/computer-rpc/server";
-import type { Database } from "@cloudflare/dofs";
+} from "@vibe-box/computer-rpc/server";
+import type { Database } from "@vibe-box/dofs";
 import { WebSocket, WebSocketServer } from "ws";
 import { Runner } from "../exec/index.js";
 import type { ExecEvent as ComputerdExecEvent } from "../exec/types.js";

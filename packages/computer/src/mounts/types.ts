@@ -9,7 +9,7 @@
 // roots and resolves factories lives in registry.ts; the index pass
 // that drives materialize() lives in index.ts.
 
-import type { SQLiteWorkspaceProvider } from "@cloudflare/dofs";
+import type { SQLiteWorkspaceProvider } from "@vibe-box/dofs";
 
 // Common base for every concrete mount. The `kind` string is for
 // diagnostics and the _vfs_mounts table; it is not interpreted.

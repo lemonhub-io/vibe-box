@@ -1,4 +1,4 @@
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it, vi } from "vitest";
 
 import type { BackendHandle, WorkspaceBackend } from "./backend.js";
@@ -28,10 +28,10 @@ function expectThinkWorkspace(
 // code; the backend's only contract is "produce a SyncRPC
 // stub that computerd would speak". A plain object is enough.
 function composite(
-  sync: import("@cloudflare/computer-rpc").SyncRPC,
-): import("@cloudflare/computer-rpc").WorkspaceRPC {
+  sync: import("@vibe-box/computer-rpc").SyncRPC,
+): import("@vibe-box/computer-rpc").WorkspaceRPC {
   const notWired = () => Promise.reject(new Error("shell not wired in this test"));
-  const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+  const shell: import("@vibe-box/computer-rpc").ShellRPC = {
     exec: notWired,
     getExec: notWired,
     killExec: notWired,
@@ -40,7 +40,7 @@ function composite(
   return { sync, shell };
 }
 
-function fakeRpc(): import("@cloudflare/computer-rpc").SyncRPC {
+function fakeRpc(): import("@vibe-box/computer-rpc").SyncRPC {
   const blobs = new Map<string, Uint8Array>();
   const files = new Map<
     string,
@@ -80,7 +80,7 @@ function fakeRpc(): import("@cloudflare/computer-rpc").SyncRPC {
       return {
         currentCursor: { rev: 0, path: null },
         appliedPushCursor: { rev: 0, path: null },
-        stream: new ReadableStream<import("@cloudflare/dofs").ChangeEntry>({
+        stream: new ReadableStream<import("@vibe-box/dofs").ChangeEntry>({
           start(c) {
             c.close();
           },
@@ -132,10 +132,7 @@ function fakeRpc(): import("@cloudflare/computer-rpc").SyncRPC {
   };
 }
 
-function makeBackend(
-  id: string,
-  rpc?: import("@cloudflare/computer-rpc").SyncRPC,
-): WorkspaceBackend {
+function makeBackend(id: string, rpc?: import("@vibe-box/computer-rpc").SyncRPC): WorkspaceBackend {
   return {
     id,
     type: "fake",
@@ -150,13 +147,13 @@ function makeBackend(
 // the command executor's exec bracket settles right away. Used by
 // the multi-backend selection tests.
 function execBackend(id: string, onExec: (command: string) => void): WorkspaceBackend {
-  const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+  const shell: import("@vibe-box/computer-rpc").ShellRPC = {
     async exec(input) {
       onExec(input.source);
       const execId = input.id ?? `${id}-${Math.random().toString(36).slice(2)}`;
       return {
         id: execId,
-        events: new ReadableStream<import("@cloudflare/computer-rpc").ExecEvent>({
+        events: new ReadableStream<import("@vibe-box/computer-rpc").ExecEvent>({
           start(c) {
             c.enqueue({ id: execId, seq: 1, name: "exit", code: 0 });
             c.close();
@@ -254,7 +251,7 @@ describe("Workspace backend selection", () => {
 
   it("forwards per-execution stdin to command backends", async () => {
     let receivedStdin: Uint8Array | undefined;
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec(input) {
         receivedStdin = input.stdin;
         const id = input.id ?? "stdin-command";
@@ -286,7 +283,7 @@ describe("Workspace backend selection", () => {
 
   it("forwards per-execution environment variables to command backends", async () => {
     let receivedEnv: Record<string, string> | undefined;
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec(input) {
         receivedEnv = input.env;
         const id = input.id ?? "env-command";
@@ -323,7 +320,7 @@ describe("Workspace backend selection", () => {
 
   it("flushes incomplete trailing UTF-8 from command execution", async () => {
     const id = "utf8-command";
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         return {
           id,
@@ -354,12 +351,12 @@ describe("Workspace backend selection", () => {
 
   it("reports command executions killed through runtime as cancelled", async () => {
     const controllers: Array<
-      ReadableStreamDefaultController<import("@cloudflare/computer-rpc").ExecEvent>
+      ReadableStreamDefaultController<import("@vibe-box/computer-rpc").ExecEvent>
     > = [];
     const id = "cancel-command";
-    let exit: import("@cloudflare/computer-rpc").ExecEvent | undefined;
+    let exit: import("@vibe-box/computer-rpc").ExecEvent | undefined;
     const events = () =>
-      new ReadableStream<import("@cloudflare/computer-rpc").ExecEvent>({
+      new ReadableStream<import("@vibe-box/computer-rpc").ExecEvent>({
         start(controller) {
           if (exit) {
             controller.enqueue(exit);
@@ -367,7 +364,7 @@ describe("Workspace backend selection", () => {
           } else controllers.push(controller);
         },
       });
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         return { id, events: events() };
       },
@@ -728,7 +725,7 @@ describe("Workspace backend selection", () => {
   describe("workspace.git", () => {
     // workspace.git is an opt-in property accessor. The default
     // Workspace graph stays free of the git implementation; callers
-    // that need git pass the factory from @cloudflare/computer/git.
+    // that need git pass the factory from @vibe-box/computer/git.
     // The client is still lazy once configured, so touching the
     // getter does not load isomorphic-git / diff, and it works on a
     // filesystem-only Workspace because every subcommand reads and
@@ -756,7 +753,7 @@ describe("Workspace backend selection", () => {
       const ws = new Workspace({ storage: makeStorage(), git: createGitClient() });
       const res = await ws.git.cli({ argv: ["version"] });
       expect(res.exitCode).toBe(0);
-      expect(res.stdout).toContain("@cloudflare/computer");
+      expect(res.stdout).toContain("@vibe-box/computer");
     });
   });
 
@@ -916,7 +913,7 @@ describe("Workspace backend selection", () => {
 
   it("reconciles watermarks on the lazy connect when the remote is behind", async () => {
     let watermarksCalls = 0;
-    const sync: import("@cloudflare/computer-rpc").SyncRPC = {
+    const sync: import("@vibe-box/computer-rpc").SyncRPC = {
       ...fakeRpc(),
       async watermarks() {
         watermarksCalls++;
@@ -927,7 +924,7 @@ describe("Workspace backend selection", () => {
     const ws = new Workspace({ storage, backends: [makeBackend("only", sync)] });
     // Pre-seed local watermarks for the "only" backend.
     const { readFetchCursor, readWatermark, writeFetchCursor, writeWatermark } = await import(
-      "@cloudflare/dofs"
+      "@vibe-box/dofs"
     );
     writeWatermark(ws.db, "pushRev", 17, "only");
     writeFetchCursor(ws.db, { rev: 42, path: null }, "only");
@@ -950,7 +947,7 @@ describe("Workspace backend selection", () => {
       touched.push(name);
       throw new Error(`sync.${name} must not be reached when sync: 'none'`);
     };
-    const sync: import("@cloudflare/computer-rpc").SyncRPC = {
+    const sync: import("@vibe-box/computer-rpc").SyncRPC = {
       push: () => tripwire("push"),
       fetchChanges: () => tripwire("fetchChanges"),
       readEntry: () => tripwire("readEntry"),
@@ -1083,7 +1080,7 @@ describe("Workspace mutation serialization", () => {
         releasePush2 = r;
       }),
     ];
-    const rpc: import("@cloudflare/computer-rpc").SyncRPC = {
+    const rpc: import("@vibe-box/computer-rpc").SyncRPC = {
       ...fakeRpc(),
       async push(input) {
         inFlight.push++;
@@ -1129,7 +1126,7 @@ describe("Workspace mutation serialization", () => {
     // While a push() is held in flight, reads on the local store
     // must still resolve. The FIFO only gates mutating entry points.
     let releasePush: (() => void) | undefined;
-    const rpc: import("@cloudflare/computer-rpc").SyncRPC = {
+    const rpc: import("@vibe-box/computer-rpc").SyncRPC = {
       ...fakeRpc(),
       async push(input) {
         await new Promise<void>((r) => {
@@ -1174,7 +1171,7 @@ describe("Workspace transport-failure invalidation", () => {
     onConnect: () => void,
   ): { backend: WorkspaceBackend; failNext: () => void } {
     let shouldFail = false;
-    const sync: import("@cloudflare/computer-rpc").SyncRPC = {
+    const sync: import("@vibe-box/computer-rpc").SyncRPC = {
       ...fakeRpc(),
       async push(input) {
         if (shouldFail) throw new WorkspaceTransportError("WebSocket closed");
@@ -1194,7 +1191,7 @@ describe("Workspace transport-failure invalidation", () => {
         return {
           currentCursor: { rev: 0, path: null },
           appliedPushCursor: { rev: 0, path: null },
-          stream: new ReadableStream<import("@cloudflare/dofs").ChangeEntry>({
+          stream: new ReadableStream<import("@vibe-box/dofs").ChangeEntry>({
             start(c) {
               c.close();
             },
@@ -1265,7 +1262,7 @@ describe("Workspace transport-failure invalidation", () => {
 
   it("non-transport errors do not invalidate the cached handle", async () => {
     let connects = 0;
-    const sync: import("@cloudflare/computer-rpc").SyncRPC = {
+    const sync: import("@vibe-box/computer-rpc").SyncRPC = {
       ...fakeRpc(),
       async push() {
         throw new Error("EROFS: read-only file system");
@@ -1295,7 +1292,7 @@ describe("Workspace transport-failure invalidation", () => {
 
   it("shell.exec invalidates the cached handle on a transport error", async () => {
     let connects = 0;
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         throw new WorkspaceTransportError("RPC session was shut down");
       },
@@ -1331,12 +1328,12 @@ describe("Workspace transport-failure invalidation", () => {
     // the wrap around the returned handle must invalidate the
     // cached backend handle so the next operation reconnects.
     let connects = 0;
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec(input) {
         const execId = input.id ?? "mid-stream";
         return {
           id: execId,
-          events: new ReadableStream<import("@cloudflare/computer-rpc").ExecEvent>({
+          events: new ReadableStream<import("@vibe-box/computer-rpc").ExecEvent>({
             start(c) {
               c.error(new WorkspaceTransportError("WebSocket closed mid-stream"));
             },
@@ -1385,14 +1382,14 @@ describe("Workspace transport-failure invalidation", () => {
     // Per-exec stream controllers so each handle's stream can be
     // settled independently. Indexed by exec call order.
     const execStreams: ReadableStreamDefaultController<
-      import("@cloudflare/computer-rpc").ExecEvent
+      import("@vibe-box/computer-rpc").ExecEvent
     >[] = [];
-    const shell: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shell: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec(input) {
         const execId = input.id ?? `exec-${execStreams.length}`;
         return {
           id: execId,
-          events: new ReadableStream<import("@cloudflare/computer-rpc").ExecEvent>({
+          events: new ReadableStream<import("@vibe-box/computer-rpc").ExecEvent>({
             start(c) {
               execStreams.push(c);
             },

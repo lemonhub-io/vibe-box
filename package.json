@@ -1,5 +1,5 @@
 {
-  "name": "@cloudflare/computer",
+  "name": "@vibe-box/computer",
   "private": true,
   "packageManager": "npm",
   "workspaces": [

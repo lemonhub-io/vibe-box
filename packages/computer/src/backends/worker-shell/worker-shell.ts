@@ -22,7 +22,7 @@
 // sync: "none". Workspace.push and Workspace.pull short-circuit;
 // reconcileWatermarks on connect is skipped.
 
-import type { ExecEvent, ShellRPC, SyncRPC, WorkspaceRPC } from "@cloudflare/computer-rpc";
+import type { ExecEvent, ShellRPC, SyncRPC, WorkspaceRPC } from "@vibe-box/computer-rpc";
 
 import type { BackendHandle, WorkspaceBackend } from "../../backend.js";
 import type { WorkspaceServiceProxyProps } from "../../proxy.js";

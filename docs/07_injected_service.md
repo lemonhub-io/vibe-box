@@ -11,12 +11,12 @@ exec runner, and the capnweb RPC endpoint the DO talks to.
 
 The package ships it as a single self-contained Node SEA binary —
 **`computerd`** — produced by `packages/computerd/` (npm package
-`@cloudflare/computerd`, bin name `computerd`). The binary embeds Node,
+`@vibe-box/computerd`, bin name `computerd`). The binary embeds Node,
 the `fuse-native` prebuilds, and `libfuse` as SEA assets, so the host
 image does **not** need a Node runtime. Build it with:
 
 ```bash
-npm run build:bin --workspace @cloudflare/computerd
+npm run build:bin --workspace @vibe-box/computerd
 # → artifacts/computerd/computerd-linux-x64
 # → artifacts/computerd/computerd-macos-x64
 ```

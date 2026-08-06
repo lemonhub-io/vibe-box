@@ -307,7 +307,7 @@ edited file) shows up exactly once on the wire. See
 
 A *conflict* arises when two writers both mutate the same path without
 seeing each other's change first. Understanding where conflicts can and
-cannot happen in `@cloudflare/computer` is essential before reasoning
+cannot happen in `@vibe-box/computer` is essential before reasoning
 about the guarantees the system provides.
 
 ### Within a single Workspace instance (DO)

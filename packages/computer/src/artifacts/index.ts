@@ -1,4 +1,4 @@
-// Public surface of @cloudflare/computer/artifacts.
+// Public surface of @vibe-box/computer/artifacts.
 //
 // `createArtifact(binding, sessionId)` is the one entry point. It
 // binds a Cloudflare Artifacts namespace binding and a session id
@@ -11,7 +11,7 @@
 // command dispatches through the CLI so the in-shell tool and the
 // JS API cannot drift.
 //
-//   import { createArtifact } from "@cloudflare/computer/artifacts";
+//   import { createArtifact } from "@vibe-box/computer/artifacts";
 //
 // The binding, its repo handle, and the result shapes (`Artifacts`,
 // `ArtifactsRepo`, `ArtifactsCreateRepoResult`, ...) are the global

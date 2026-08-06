@@ -1,13 +1,13 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "cloudflare/computer" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "lemonhub-io/vibe-box" }],
   "commit": false,
   "fixed": [],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@example/*", "@cloudflare/example-*"],
+  "ignore": ["@example/*", "@vibe-box/example-*"],
   "privatePackages": {
     "version": true,
     "tag": false

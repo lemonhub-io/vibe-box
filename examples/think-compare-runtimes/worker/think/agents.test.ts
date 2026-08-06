@@ -32,7 +32,7 @@ vi.mock("@cloudflare/think", () => ({
   },
 }));
 
-vi.mock("@cloudflare/computer", () => ({
+vi.mock("@vibe-box/computer", () => ({
   Workspace: class {
     readonly fs = {
       mkdir: async () => {},
@@ -59,7 +59,7 @@ vi.mock("@cloudflare/computer", () => ({
   WorkspaceServiceProxy: class {},
 }));
 
-vi.mock("@cloudflare/computer/backends/container", () => ({
+vi.mock("@vibe-box/computer/backends/container", () => ({
   CloudflareContainerBackend: class {
     readonly id: string;
 
@@ -74,7 +74,7 @@ vi.mock("@cloudflare/computer/backends/container", () => ({
   },
 }));
 
-vi.mock("@cloudflare/computer/backends/worker-shell", () => ({
+vi.mock("@vibe-box/computer/backends/worker-shell", () => ({
   WorkerShellBackend: class {
     readonly id: string;
 

@@ -1,5 +1,5 @@
 // ShellWorker — the WorkerEntrypoint a user Worker exposes for
-// the WorkerShellBackend in @cloudflare/computer to call.
+// the WorkerShellBackend in @vibe-box/computer to call.
 //
 // Each exec call independently reaches the host Workspace
 // through a DurableObjectNamespace binding wired into env by
@@ -76,7 +76,7 @@ export interface HostWorkspaceStub extends GitCommandHost, AssetsCommandHost {
 const DEFAULT_CWD = "/workspace";
 const MAX_OUTPUT_BYTES = 1024 * 1024;
 
-// Wire event shape. Matches @cloudflare/computer-rpc's ExecEvent
+// Wire event shape. Matches @vibe-box/computer-rpc's ExecEvent
 // but with stdout/stderr values as utf8 strings (the host-side
 // decoder re-encodes to Uint8Array before WorkspaceShell sees
 // them).

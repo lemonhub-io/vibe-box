@@ -39,7 +39,7 @@
 // under both workerd and node (tests, type-only consumers), while
 // `cloudflare:workers` only resolves under workerd.
 
-import { trackStub, untrackStub } from "@cloudflare/computer-rpc/debug";
+import { trackStub, untrackStub } from "@vibe-box/computer-rpc/debug";
 import type {
   GrepOptions,
   MkdirOptions,
@@ -52,7 +52,7 @@ import type {
   WorkspaceStatResult,
   WriteFileContent,
   WriteFileOptions,
-} from "@cloudflare/dofs";
+} from "@vibe-box/dofs";
 import { RpcTarget } from "capnweb";
 
 import type {
@@ -576,7 +576,7 @@ export class WorkspaceGitStub extends RpcTarget {
 // Workspace owns the lifecycle and the stub just delegates.
 //
 // Note the name collision: the *type* `WorkspaceRPC` is also
-// exported by @cloudflare/computer-rpc as the wire contract
+// exported by @vibe-box/computer-rpc as the wire contract
 // between wsd and the DO. WorkspaceStub here is a different thing
 // (the Workers-RPC value carried between the DO and a Worker), so
 // the name doesn't clash.

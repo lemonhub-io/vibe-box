@@ -1,5 +1,5 @@
-import type { ChangeEntry } from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import type { ChangeEntry } from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { describe, expect, it } from "vitest";
 
 import type { BackendHandle, WorkspaceBackend } from "./backend.js";
@@ -32,10 +32,10 @@ class MemoryRetryScheduler implements SyncRetryScheduler {
 
 function retryBackend(options: {
   onExec(): void;
-  fetchChanges: import("@cloudflare/computer-rpc").SyncRPC["fetchChanges"];
+  fetchChanges: import("@vibe-box/computer-rpc").SyncRPC["fetchChanges"];
   close?: () => Promise<void>;
 }): WorkspaceBackend {
-  const sync: import("@cloudflare/computer-rpc").SyncRPC = {
+  const sync: import("@vibe-box/computer-rpc").SyncRPC = {
     async push(input) {
       return { rev: 0, appliedPushCursor: { rev: input.senderRev, path: null } };
     },

@@ -1,5 +1,5 @@
 {
-  "name": "@cloudflare/computer-computerd-linux-x64",
+  "name": "@vibe-box/computer-computerd-linux-x64",
   "version": "0.1.0-alpha.1",
   "description": "Docker image context for the prebuilt computerd linux-x64 binary.",
   "license": "MIT",

@@ -14,7 +14,7 @@
 // out-of-date reference and an OOM in Bash takes nothing else
 // with it.
 
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { FakeArtifactsBinding } from "../../../tests/utilities/fake-artifacts-binding.js";
 import type { ArtifactsCLIInput, ArtifactsCLIResult } from "../../artifacts/index.js";
@@ -339,7 +339,7 @@ describe("ShellWorker", () => {
       }[];
       const stdout = events.find((e) => e.name === "stdout");
       const exit = events.find((e) => e.name === "exit");
-      expect(stdout?.value).toContain("@cloudflare/computer");
+      expect(stdout?.value).toContain("@vibe-box/computer");
       expect(exit?.value).toBe(0);
     });
 

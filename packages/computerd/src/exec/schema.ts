@@ -5,7 +5,7 @@
 // EXISTS keeps it idempotent across restarts; the runner calls
 // initializeExecSchema() once at construction.
 
-import type { Database } from "@cloudflare/dofs";
+import type { Database } from "@vibe-box/dofs";
 
 // Single table, middle-ground shape: one row per event, kind
 // discriminates stdout/stderr/exit, value

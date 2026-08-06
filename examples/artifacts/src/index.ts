@@ -17,11 +17,11 @@ import {
   type WorkspaceClient,
   WorkspaceServiceProxy,
   withWorkspace,
-} from "@cloudflare/computer";
+} from "@vibe-box/computer";
 import {
   WorkerShellBackend,
   type WorkerShellBackendOptions,
-} from "@cloudflare/computer/backends/worker-shell";
+} from "@vibe-box/computer/backends/worker-shell";
 
 export { WorkspaceServiceProxy };
 
@@ -47,7 +47,7 @@ interface ArtifactCreateOutput {
 }
 
 const WORKSPACE_ROOT = "/workspace";
-const SOURCE_REPO = "https://github.com/cloudflare/computer";
+const SOURCE_REPO = "https://github.com/lemonhub-io/vibe-box";
 const EXAMPLE_PATH = "examples/worker-shell";
 const GIT_REMOTE = "origin";
 const SHARE_TOKEN_TTL = "24h";
@@ -146,7 +146,7 @@ async function handleCreate(request: Request, env: Env): Promise<Response> {
         sh`git init --initial-branch=main ${projectDir}`,
         sh`cat ${`${projectDir}/.git/HEAD`} >/dev/null`,
         "git add .",
-        sh`git commit -m ${`Create ${name} worker example`} --author ${"Cloudflare Computer Artifacts Example <computer-artifacts@example.invalid>"}`,
+        sh`git commit -m ${`Create ${name} worker example`} --author ${"Vibe Box Artifacts Example <computer-artifacts@example.invalid>"}`,
       ].join(" && "),
       { cwd: projectDir },
     );

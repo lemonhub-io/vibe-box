@@ -42,7 +42,7 @@ capnweb endpoints from a plain Node script.
   natively; on macOS you need `colima start --vm-type=vz` (the
   default qemu vm doesn't surface `/dev/fuse`).
 - A fresh computerd binary at `artifacts/computerd/computerd-linux-x64`. Build it
-  with `npm run build:bin --workspace @cloudflare/computerd`,
+  with `npm run build:bin --workspace @vibe-box/computerd`,
   or just `npm run build:all` from the repo root if you need the
   docker image too.
 
@@ -88,7 +88,7 @@ with a missing `/dev/fuse` would have failed startup outright.
 ## Drive computerd from a Node script
 
 computerd serves a composite `WorkspaceRPC` over `/ws` (capnweb WebSocket)
-and `/api` (capnweb HTTP batch). The `@cloudflare/computer-rpc/client`
+and `/api` (capnweb HTTP batch). The `@vibe-box/computer-rpc/client`
 package wraps the WS form and the `/driver` subpath exposes
 `pushOnce`/`pullOnce` against a Node-side `Database`.
 
@@ -101,8 +101,8 @@ cat > package.json <<'EOF'
   "type": "module",
   "private": true,
   "dependencies": {
-    "@cloudflare/dofs": "file:/workspace/packages/dofs",
-    "@cloudflare/computer-rpc": "file:/workspace/packages/rpc",
+    "@vibe-box/dofs": "file:/workspace/packages/dofs",
+    "@vibe-box/computer-rpc": "file:/workspace/packages/rpc",
     "ws": "^8.18.0"
   }
 }
@@ -116,10 +116,10 @@ package (Node's built-in `WebSocket` doesn't negotiate the
 permessage-deflate extension that computerd advertises):
 
 ```js
-import { Database, WorkspaceFilesystem, initializeSchema } from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
-import { createWorkspaceClient } from "@cloudflare/computer-rpc/client";
-import { pullOnce, pushOnce } from "@cloudflare/computer-rpc/driver";
+import { Database, WorkspaceFilesystem, initializeSchema } from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
+import { createWorkspaceClient } from "@vibe-box/computer-rpc/client";
+import { pullOnce, pushOnce } from "@vibe-box/computer-rpc/driver";
 import { WebSocket } from "ws";
 
 const url = process.env.COMPUTERD_URL;                // e.g. http://127.0.0.1:18080
@@ -283,8 +283,8 @@ M3.5-class issues (read-only mount enforcement) without going
 through the full Workspace constructor:
 
 ```js
-import { Database, ROOT_INODE, WorkspaceFilesystem, initializeSchema, invalidateReadOnlyMountCache } from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { Database, ROOT_INODE, WorkspaceFilesystem, initializeSchema, invalidateReadOnlyMountCache } from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 
 const storage = new SQLiteTestStorage();
 const db = new Database(storage);

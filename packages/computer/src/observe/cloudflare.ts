@@ -1,6 +1,6 @@
 // Cloudflare runtime adapter for the workspace observer hook.
 //
-// Wires `@cloudflare/computer`'s span-shaped observer to the Cloudflare
+// Wires `@vibe-box/computer`'s span-shaped observer to the Cloudflare
 // runtime's built-in user tracing surface (`Tracing.enterSpan`). The
 // runtime owns the span lifecycle: it opens the span, propagates the
 // active context through `AsyncContextFrame` so nested spans become

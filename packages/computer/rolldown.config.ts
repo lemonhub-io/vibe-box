@@ -1,7 +1,7 @@
-// Bundle @cloudflare/computer's source plus its internal deps
-// (@cloudflare/dofs, @cloudflare/computer-rpc) into a single ESM
+// Bundle @vibe-box/computer's source plus its internal deps
+// (@vibe-box/dofs, @vibe-box/computer-rpc) into a single ESM
 // artefact that downstream callers can install with no other
-// @cloudflare/* dependencies.
+// @vibe-box/* dependencies.
 //
 // Externals:
 //   - cloudflare:workers — provided by the workerd runtime.
@@ -47,10 +47,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@cloudflare/dofs": resolve(here, "../dofs/src/index.ts"),
-      "@cloudflare/dofs/testing": resolve(here, "../dofs/src/testing.ts"),
-      "@cloudflare/computer-rpc": resolve(here, "../rpc/src/index.ts"),
-      "@cloudflare/computer-rpc/driver": resolve(here, "../rpc/src/sync-driver.ts"),
+      "@vibe-box/dofs": resolve(here, "../dofs/src/index.ts"),
+      "@vibe-box/dofs/testing": resolve(here, "../dofs/src/testing.ts"),
+      "@vibe-box/computer-rpc": resolve(here, "../rpc/src/index.ts"),
+      "@vibe-box/computer-rpc/driver": resolve(here, "../rpc/src/sync-driver.ts"),
       pako: resolve(here, "src/git/pako-zlib-shim.ts"),
     },
   },

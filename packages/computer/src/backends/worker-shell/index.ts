@@ -1,4 +1,4 @@
-// Public surface of @cloudflare/computer/backends/worker.
+// Public surface of @vibe-box/computer/backends/worker.
 //
 // The worker backend pairs a Workspace with a just-bash shell
 // running in a Dynamic Worker minted through env.LOADER. Every
@@ -8,7 +8,7 @@
 //
 // Imported via:
 //
-//   import { WorkerShellBackend } from "@cloudflare/computer/backends/worker-shell";
+//   import { WorkerShellBackend } from "@vibe-box/computer/backends/worker-shell";
 //
 // The package ships SHELL_MODULES — a record of module name →
 // source string covering the pre-built ShellWorker entry plus

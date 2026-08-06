@@ -19,8 +19,8 @@ import {
   readFetchCursor,
   readWatermark,
   SQLiteWorkspaceProvider,
-} from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+} from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { bench, describe } from "vitest";
 
 import { createSyncServer } from "./server.js";

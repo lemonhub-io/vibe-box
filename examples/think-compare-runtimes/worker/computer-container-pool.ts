@@ -2,7 +2,7 @@ import { DurableObject } from "cloudflare:workers";
 import {
   type IWorkspaceContainerAPI,
   withWorkspaceContainer,
-} from "@cloudflare/computer/backends/container";
+} from "@vibe-box/computer/backends/container";
 import { type ContainerPoolConfigEnv, containerSleepAfterMs } from "./container-config";
 import type { WarmPoolRuntime } from "./container-pool-manager";
 import { ContainerWarmPool } from "./container-warm-pool";

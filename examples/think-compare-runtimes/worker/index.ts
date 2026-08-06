@@ -1,5 +1,5 @@
-import type { WorkerShellBackendOptions } from "@cloudflare/computer/backends/worker-shell";
 import type { Sandbox as SandboxDO } from "@cloudflare/sandbox";
+import type { WorkerShellBackendOptions } from "@vibe-box/computer/backends/worker-shell";
 import { getServerByName, routePartykitRequest, Server } from "partyserver";
 import type { RunEvent } from "../shared/events";
 import { comparisonFixture } from "../shared/fixture";

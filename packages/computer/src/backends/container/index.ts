@@ -1,4 +1,4 @@
-// Public surface of @cloudflare/computer/backends/container.
+// Public surface of @vibe-box/computer/backends/container.
 //
 // The container backend pairs a Workspace with a computerd daemon
 // running inside a Cloudflare Container. computerd owns its own
@@ -10,7 +10,7 @@
 //   import {
 //     CloudflareContainerBackend,
 //     withWorkspaceContainer,
-//   } from "@cloudflare/computer/backends/container";
+//   } from "@vibe-box/computer/backends/container";
 
 export {
   CloudflareContainerBackend,

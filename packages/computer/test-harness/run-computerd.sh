@@ -28,7 +28,7 @@ fi
 
 if [[ ! -x "$BINARY" ]]; then
   echo "computerd binary not found at $BINARY" >&2
-  echo "Run 'npm run build:bin --workspace @cloudflare/computerd' first" >&2
+  echo "Run 'npm run build:bin --workspace @vibe-box/computerd' first" >&2
   exit 1
 fi
 

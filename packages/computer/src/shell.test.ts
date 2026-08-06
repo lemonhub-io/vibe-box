@@ -8,7 +8,7 @@
 // executor returns raw events and the runtime drains them — so those
 // cases live in runtime.test.ts, not here.
 
-import type { ExecEvent, ShellRPC, SyncRPC, WorkspaceRPC } from "@cloudflare/computer-rpc";
+import type { ExecEvent, ShellRPC, SyncRPC, WorkspaceRPC } from "@vibe-box/computer-rpc";
 import { describe, expect, it } from "vitest";
 
 import { CommandExecutor, type KillSignal, type Sync } from "./shell.js";

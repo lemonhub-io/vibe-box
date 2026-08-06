@@ -17,7 +17,7 @@
 // WorkspaceRPC, so the wire stub exposes one stable surface while
 // the two halves stay internally separable.
 
-import type { ChangeCursor, ChangeEntry } from "@cloudflare/dofs";
+import type { ChangeCursor, ChangeEntry } from "@vibe-box/dofs";
 
 export interface SyncRPC {
   // DO → container. Stream a coalesced batch of changes. Bytes are

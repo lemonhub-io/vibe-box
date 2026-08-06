@@ -106,7 +106,7 @@ test("computerd exposes file IO through real FUSE when FUSE_MOUNT=fuse", async (
 });
 
 test("/ws serves a capnweb WorkspaceRPC session", async (_ctx) => {
-  const { createWorkspaceClient } = await import("@cloudflare/computer-rpc/client");
+  const { createWorkspaceClient } = await import("@vibe-box/computer-rpc/client");
   const port = await getAvailablePort();
   const mountPoint = await fs.mkdtemp(path.join(os.tmpdir(), "computerd-mount-"));
   await startComputerd({ port, mountPoint, env: { FUSE_MOUNT: "none" } });
@@ -213,10 +213,10 @@ test("FUSE_MOUNT=shim materialises an RPC push under the mount point", async (_c
   // capnweb, and the shim drops it on disk at the same absolute
   // path. The on-disk read is what proves the mountPoint plumbing
   // works — a regression would surface here as ENOENT.
-  const { Database, initializeSchema, WorkspaceFilesystem } = await import("@cloudflare/dofs");
-  const { SQLiteTestStorage } = await import("@cloudflare/dofs/testing");
-  const { createWorkspaceClient } = await import("@cloudflare/computer-rpc/client");
-  const { pushOnce } = await import("@cloudflare/computer-rpc/driver");
+  const { Database, initializeSchema, WorkspaceFilesystem } = await import("@vibe-box/dofs");
+  const { SQLiteTestStorage } = await import("@vibe-box/dofs/testing");
+  const { createWorkspaceClient } = await import("@vibe-box/computer-rpc/client");
+  const { pushOnce } = await import("@vibe-box/computer-rpc/driver");
 
   const port = await getAvailablePort();
   const mountPoint = await fs.mkdtemp(path.join(os.tmpdir(), "computerd-shim-push-"));

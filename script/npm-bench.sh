@@ -9,7 +9,7 @@
 #
 # Scenarios:
 #   express         npm install express --prefer-offline
-#   computer        npm install for the cloudflare/computer monorepo
+#   computer        npm install for the vibe-box monorepo
 #   synthetic       a synthetic package tree with many tiny files
 #
 # Knobs (environment variables):

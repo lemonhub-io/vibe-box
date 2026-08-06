@@ -13,7 +13,7 @@
 //
 //   // Worker entry point — re-export the class so the runtime can
 //   // wrap it into a loopback binding.
-//   export { WorkspaceProxy } from "@cloudflare/computer";
+//   export { WorkspaceProxy } from "@vibe-box/computer";
 //
 //   class ComputerdContainer extends DurableObject<Env> {
 //     constructor(ctx: DurableObjectState, env: Env) {
@@ -45,7 +45,7 @@
 // clone and DurableObjectNamespace references aren't clonable. The
 // proxy looks up `env[binding]` at fetch time and falls back to a
 // clear error if the name doesn't resolve. The DO class doesn't
-// need to live in @cloudflare/computer — the proxy works for any
+// need to live in @vibe-box/computer — the proxy works for any
 // DO that implements a fetch() handler answering /health and /ws.
 
 import { RpcTarget, WorkerEntrypoint } from "cloudflare:workers";
@@ -131,7 +131,7 @@ export class ArtifactsCLITarget extends RpcTarget {
 // Usage:
 //
 //   // Worker entry: re-export so the runtime can wrap it.
-//   export { WorkspaceServiceProxy } from "@cloudflare/computer";
+//   export { WorkspaceServiceProxy } from "@vibe-box/computer";
 //
 //   // Inside the DO that owns the Workspace:
 //   const host = ctx.exports.WorkspaceServiceProxy({
@@ -147,7 +147,7 @@ export class ArtifactsCLITarget extends RpcTarget {
 //
 // The proxy resolves env[binding] at call time — the same lazy
 // lookup WorkspaceProxy does for the /ws upgrade path — so the
-// DO class doesn't need to live in @cloudflare/computer. Any
+// DO class doesn't need to live in @vibe-box/computer. Any
 // DO that exposes a `__getWorkspaceStub(): WorkspaceStub` RPC method
 // works.
 export interface WorkspaceServiceProxyProps {

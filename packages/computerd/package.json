@@ -1,7 +1,7 @@
 {
-  "name": "@cloudflare/computerd",
+  "name": "@vibe-box/computerd",
   "version": "0.1.0-alpha.1",
-  "description": "Computer daemon CLI and FUSE mount. Source-only; the distributable lives at @cloudflare/computer-computerd-linux-x64.",
+  "description": "Computer daemon CLI and FUSE mount. Source-only; the distributable lives at @vibe-box/computer-computerd-linux-x64.",
   "license": "MIT",
   "private": true,
   "type": "commonjs",
@@ -24,9 +24,9 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@cloudflare/computer-rpc": "*",
-    "@cloudflare/dofs": "*",
     "@platformatic/vfs": "^0.4.0",
+    "@vibe-box/computer-rpc": "*",
+    "@vibe-box/dofs": "*",
     "fuse-native": "^2.2.6"
   },
   "devDependencies": {

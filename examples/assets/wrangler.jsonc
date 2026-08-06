@@ -1,7 +1,7 @@
 {
   // Example: Worker + Durable Object that turns a prompt into an
   // image with Workers AI, writes it into a Workspace, and returns
-  // a shareable link via @cloudflare/computer/assets.
+  // a shareable link via @vibe-box/computer/assets.
   //
   // Production-only. The presigner needs R2 S3 credentials set as
   // secrets (see the README), and the image model runs on

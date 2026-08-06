@@ -31,7 +31,7 @@ client ─► Worker /c/<name>/{file,exec}
 ```
 
 1. The DO constructs a `WorkerJavaScriptBackend` from
-   `@cloudflare/computer/backends/worker-javascript`, passing only
+   `@vibe-box/computer/backends/worker-javascript`, passing only
    the Loader binding. Unlike the shell backend there is no
    `WorkspaceServiceProxy` loopback: the backend is self-contained
    and reaches the host through the `WorkspaceRuntimeBridge` it
@@ -95,7 +95,7 @@ POST /c/<name>/exec                    { source, input?, cwd?, env?, stdin? }
 ## Run it locally
 
 No Docker, no extra build step. The module runner ships inside
-`@cloudflare/computer/backends/worker-javascript`;
+`@vibe-box/computer/backends/worker-javascript`;
 `WorkerJavaScriptBackend` mints the Dynamic Worker through the
 Loader binding internally so the DO constructor stays a one-line
 backend invocation.
@@ -142,7 +142,7 @@ examples/worker-javascript/
 ```
 
 Nothing else. The Dynamic Worker module runner ships from
-`@cloudflare/computer/backends/worker-javascript`.
+`@vibe-box/computer/backends/worker-javascript`.
 
 ## Known limitations
 

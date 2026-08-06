@@ -1,9 +1,9 @@
 {
-  "name": "@example/computer-container",
+  "name": "@example/vibe-container",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Example Worker + Durable Object that uses @cloudflare/computer inside a Cloudflare Container.",
+  "description": "Example Worker + Durable Object that uses @vibe-box/computer inside a Cloudflare Container.",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
@@ -12,7 +12,7 @@
     "seed:r2:local": "wrangler r2 object put computer-container-hello/hello.txt --file ./seed/data/hello.txt --local"
   },
   "dependencies": {
-    "@cloudflare/computer": "*"
+    "@vibe-box/computer": "*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260616.1",

@@ -44,7 +44,7 @@
 // listens for and uses to drop its cached handle so the next call
 // rebuilds against a fresh session.
 
-import type { WorkspaceRPC } from "@cloudflare/computer-rpc";
+import type { WorkspaceRPC } from "@vibe-box/computer-rpc";
 import { newWebSocketRpcSession, type RpcStub } from "capnweb";
 
 import type { BackendHandle, WorkspaceBackend } from "../../backend.js";

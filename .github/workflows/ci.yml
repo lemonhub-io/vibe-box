@@ -46,19 +46,19 @@ jobs:
       matrix:
         include:
           - name: dofs
-            workspace: "@cloudflare/dofs"
+            workspace: "@vibe-box/dofs"
             path: packages/dofs
             needs-siblings: false
           - name: rpc
-            workspace: "@cloudflare/computer-rpc"
+            workspace: "@vibe-box/computer-rpc"
             path: packages/rpc
             needs-siblings: true
           - name: computer
-            workspace: "@cloudflare/computer"
+            workspace: "@vibe-box/computer"
             path: packages/computer
             needs-siblings: true
           - name: computerd
-            workspace: "@cloudflare/computerd"
+            workspace: "@vibe-box/computerd"
             path: packages/computerd
             needs-siblings: true
             # libfuse2 (libfuse.so.2) is what fuse-native binds to at
@@ -82,7 +82,7 @@ jobs:
       # computer + computerd jobs need dofs + rpc dist, the rpc job needs
       # dofs dist, and the cost of an extra `tsc` pass is small
       # compared to the test runtime. Revisit per-package once
-      # @cloudflare/computer bundles dofs + rpc internally.
+      # @vibe-box/computer bundles dofs + rpc internally.
       - name: Build all workspaces
         if: matrix.needs-siblings
         run: npm run build --workspaces --if-present
@@ -109,7 +109,7 @@ jobs:
       matrix:
         include:
           - name: think
-            workspace: "@cloudflare/example-think"
+            workspace: "@vibe-box/example-think"
             path: examples/think
           - name: container
             workspace: "@example/computer-container"
@@ -122,7 +122,7 @@ jobs:
       - uses: ./.github/actions/install
 
       # Examples consume the monorepo packages via local symlinks, so
-      # @cloudflare/computer's dist/ has to exist before the example's
+      # @vibe-box/computer's dist/ has to exist before the example's
       # typecheck resolves its imports.
       - run: npm run build --workspaces --if-present
 

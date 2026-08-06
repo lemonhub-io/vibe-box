@@ -3,8 +3,8 @@
 `WorkerJavaScriptBackend` runs an ECMAScript module in a fresh Cloudflare Dynamic Worker:
 
 ```ts
-import { Workspace } from "@cloudflare/computer";
-import { WorkerJavaScriptBackend } from "@cloudflare/computer/backends/worker-javascript";
+import { Workspace } from "@vibe-box/computer";
+import { WorkerJavaScriptBackend } from "@vibe-box/computer/backends/worker-javascript";
 
 const workspace = new Workspace({
   storage: ctx.storage,

@@ -6,12 +6,12 @@
 > `packages/computer/src/backends/worker-shell/`. Everything below
 > works today.
 
-`workspace.git` is a major typed surface on `Workspace`, alongside `fs`, `runtime`, Assets, and Artifacts. It is opt-in: pass `createGitClient()` from `@cloudflare/computer/git` as `WorkspaceOptions.git` to enable it. Git runs every operation against the local SQLite-backed VFS through `isomorphic-git`, so a
+`workspace.git` is a major typed surface on `Workspace`, alongside `fs`, `runtime`, Assets, and Artifacts. It is opt-in: pass `createGitClient()` from `@vibe-box/computer/git` as `WorkspaceOptions.git` to enable it. Git runs every operation against the local SQLite-backed VFS through `isomorphic-git`, so a
 filesystem-only workspace (no backend) can drive a full
 clone/commit/diff cycle. The git subpath bundles `isomorphic-git`
 lazily and replaces its `pako` dependency with a small
 `node:zlib` shim for Workers running with `nodejs_compat`; the
-default `@cloudflare/computer` graph stays free of git.
+default `@vibe-box/computer` graph stays free of git.
 
 Two doors into the same implementation:
 
@@ -112,8 +112,8 @@ diff against HEAD — through each entry point.
 ### Typed API from a durable object
 
 ```ts
-import { Workspace } from "@cloudflare/computer";
-import { createGitClient } from "@cloudflare/computer/git";
+import { Workspace } from "@vibe-box/computer";
+import { createGitClient } from "@vibe-box/computer/git";
 
 const ws = new Workspace({ storage: ctx.storage, git: createGitClient() });
 await ws.git.clone({ url: "https://github.com/example/repo.git" });
@@ -306,7 +306,7 @@ form with `??` for untracked files; `--short` / `-s` produces
 the short form (` ?` for untracked). The typed surface returns
 the underlying `StatusEntry[]`; format it with
 `formatPorcelainV2`, `formatPorcelainV1`, or `formatShort`
-from `@cloudflare/computer/git`.
+from `@vibe-box/computer/git`.
 
 *Not mapped:* `--branch`, `--ignored`, `--untracked-files`,
 the long human-readable form. The structured return is the
@@ -1068,7 +1068,7 @@ commands receive the live host stub the shell already reached,
 so they share its lifetime without refetching.
 
 ```ts
-import { ShellWorker, defineGitCommand } from "@cloudflare/computer/backends/worker-shell";
+import { ShellWorker, defineGitCommand } from "@vibe-box/computer/backends/worker-shell";
 import { type CustomCommand } from "just-bash";
 
 class MyShell extends ShellWorker {

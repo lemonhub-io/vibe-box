@@ -26,16 +26,16 @@ import {
   type WorkspaceOptions,
   WorkspaceProxy,
   withWorkspace,
-} from "@cloudflare/computer";
+} from "@vibe-box/computer";
 import {
   CloudflareContainerBackend,
   withWorkspaceContainer,
-} from "@cloudflare/computer/backends/container";
-import { createCloudflareObserver } from "@cloudflare/computer/observe/cloudflare";
+} from "@vibe-box/computer/backends/container";
+import { createCloudflareObserver } from "@vibe-box/computer/observe/cloudflare";
 
 // Re-export so the runtime can build a loopback binding for the
 // container egress (ctx.exports.WorkspaceProxy below). The class
-// itself lives in @cloudflare/computer; the re-export is what
+// itself lives in @vibe-box/computer; the re-export is what
 // puts it in the worker's top-level module graph.
 export { WorkspaceProxy };
 

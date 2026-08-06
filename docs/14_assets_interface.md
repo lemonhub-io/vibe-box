@@ -18,7 +18,7 @@ webhook without exposing the bucket or the rest of the workspace.
 ## Creating a client
 
 ```ts
-import { createAssets } from "@cloudflare/computer/assets";
+import { createAssets } from "@vibe-box/computer/assets";
 
 const assets = createAssets({
   ws,

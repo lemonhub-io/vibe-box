@@ -1,4 +1,4 @@
-# @cloudflare/computer-computerd-linux-x64
+# @vibe-box/computer-computerd-linux-x64
 
 > [!IMPORTANT]
 > **PREVIEW ONLY** This image is provided as a preview for feedback only.
@@ -8,7 +8,7 @@
 > for production use at this time.
 
 Docker image context for the prebuilt `computerd` linux-x64 binary.
-`computerd` is the daemon side of [`@cloudflare/computer`](../computer) —
+`computerd` is the daemon side of [`@vibe-box/computer`](../computer) —
 see [`docs/`](../../docs) for the wire protocol and architecture.
 
 The binary is a Node single executable application. Everything needed at
@@ -20,7 +20,7 @@ builds the binary, stages it into `bin/computerd`, and publishes the image
 instead:
 
 ```dockerfile
-FROM ghcr.io/cloudflare/computer-computerd-linux-x64:0.1.0-alpha.1 AS computerd
+FROM ghcr.io/lemonhub-io/computer-computerd-linux-x64:0.1.0-alpha.1 AS computerd
 FROM debian:stable-slim
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \

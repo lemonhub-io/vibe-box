@@ -35,7 +35,7 @@ import { accessSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createWorkspaceClient } from "@cloudflare/computer-rpc/client";
+import { createWorkspaceClient } from "@vibe-box/computer-rpc/client";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { WebSocket } from "ws";
 

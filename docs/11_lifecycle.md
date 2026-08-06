@@ -273,7 +273,7 @@ long-lived isolates that keep grabbing fresh `WorkspaceStub`s
 workloads inside a single request.
 
 Leak discovery is instrumented via `CAPNWEB_TRACK_STUBS=1` and
-`stubSnapshot()` from `@cloudflare/computer-rpc/debug`. computerd
+`stubSnapshot()` from `@vibe-box/computer-rpc/debug`. computerd
 exposes the snapshot at `GET /__computerd/stubs` when the flag is set;
 the soak script at `script/computerd-stub-soak.mjs` and the workerd
 soak at `packages/computer/tests/stub-soak.test.ts` use it to

@@ -5,7 +5,7 @@
 // Object runs the prompt through a Workers AI text-to-image model,
 // writes the generated PNG into its Workspace, then uploads that
 // file to R2 and returns a presigned URL through
-// @cloudflare/computer/assets.
+// @vibe-box/computer/assets.
 //
 // Wire shape:
 //
@@ -25,8 +25,8 @@
 // won't produce a working link. Deploy it and hit the deployed URL.
 
 import { DurableObject } from "cloudflare:workers";
-import { type DurableObjectStorageLike, Workspace } from "@cloudflare/computer";
-import { createAssets } from "@cloudflare/computer/assets";
+import { type DurableObjectStorageLike, Workspace } from "@vibe-box/computer";
+import { createAssets } from "@vibe-box/computer/assets";
 
 // Black Forest Labs FLUX.2 [klein] 9B — a fast text-to-image model.
 // Returns the image as a base64 string.

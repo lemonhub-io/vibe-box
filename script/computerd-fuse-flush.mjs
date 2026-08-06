@@ -33,7 +33,7 @@ const KEEP = process.env.KEEP === "1";
 
 if (!existsSync(BINARY)) {
   console.error(`computerd binary not found at ${BINARY}`);
-  console.error("run `npm run build:bin --workspace @cloudflare/computerd` first");
+  console.error("run `npm run build:bin --workspace @vibe-box/computerd` first");
   process.exit(2);
 }
 
@@ -145,16 +145,16 @@ async function main() {
     // 3. Pull from the container's WebSocket on the host. Mirrors
     //    what the host DO does after exec returns.
     const { createWorkspaceClient } = await import(
-      `${REPO_ROOT}/node_modules/@cloudflare/computer-rpc/dist/client.js`
+      `${REPO_ROOT}/node_modules/@vibe-box/computer-rpc/dist/client.js`
     );
     const { Database, SQLiteWorkspaceProvider, initializeSchema } = await import(
-      `${REPO_ROOT}/node_modules/@cloudflare/dofs/dist/index.js`
+      `${REPO_ROOT}/node_modules/@vibe-box/dofs/dist/index.js`
     );
     const { SQLiteTestStorage } = await import(
-      `${REPO_ROOT}/node_modules/@cloudflare/dofs/dist/testing.js`
+      `${REPO_ROOT}/node_modules/@vibe-box/dofs/dist/testing.js`
     );
     const { pullOnce } = await import(
-      `${REPO_ROOT}/node_modules/@cloudflare/computer-rpc/dist/sync-driver.js`
+      `${REPO_ROOT}/node_modules/@vibe-box/computer-rpc/dist/sync-driver.js`
     );
 
     const wsUrl = `${container.url.replace("http://", "ws://")}/ws`;

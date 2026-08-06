@@ -16,7 +16,7 @@ does not exercise cross-open kernel page-cache reuse.
 
 ```bash
 # Build the linux-x64 computerd binary.
-npm run build:bin --workspace @cloudflare/computerd
+npm run build:bin --workspace @vibe-box/computerd
 
 # Boot computerd in a docker container, run the bench inside it, drop the
 # JSON output on the host.
@@ -72,7 +72,7 @@ cache reuse pay off.
 Copy, overwrite, and write are all dominated by the write side of the
 operation. The driver buffers writes in memory and spills the whole
 file through `vfs.writeFileSync` on `flush`, which goes through
-SQLite-backed chunking in `@cloudflare/dofs`. None of the cache
+SQLite-backed chunking in `@vibe-box/dofs`. None of the cache
 options touch that path, so they don't move the numbers. Chunk-aware
 or streaming spill is the next lever for these scenarios, as called
 out in the handoff under "larger future optimization".

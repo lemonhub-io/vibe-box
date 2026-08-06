@@ -6,8 +6,8 @@ import {
   R2Bucket,
   type WorkspaceRuntimeValue,
   withWorkspace,
-} from "@cloudflare/computer";
-import { WorkerJavaScriptBackend } from "@cloudflare/computer/backends/worker-javascript";
+} from "@vibe-box/computer";
+import { WorkerJavaScriptBackend } from "@vibe-box/computer/backends/worker-javascript";
 
 export class ContainerExample extends withWorkspace(class extends DurableObject<Env> {}, (self) => {
   const { ctx, env } = self as unknown as { ctx: DurableObjectState; env: Env };

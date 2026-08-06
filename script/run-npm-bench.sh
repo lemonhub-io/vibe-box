@@ -22,7 +22,7 @@
 #   computerd linux-x64 binary at COMPUTERD_BINARY
 #
 # The binary is built with:
-#   npm run build:bin --workspace @cloudflare/computerd
+#   npm run build:bin --workspace @vibe-box/computerd
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -37,7 +37,7 @@ FUSE_TRACE="${FUSE_TRACE:-}"
 
 if [ ! -f "$COMPUTERD_BINARY" ]; then
   echo "computerd binary not found at $COMPUTERD_BINARY"
-  echo "Build it with: npm run build:bin --workspace @cloudflare/computerd"
+  echo "Build it with: npm run build:bin --workspace @vibe-box/computerd"
   exit 1
 fi
 

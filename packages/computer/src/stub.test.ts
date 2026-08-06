@@ -11,8 +11,8 @@
 // class's own contract: accessor shape, eager spawn, readFile
 // overload routing, stat ENOENT propagation, close() idempotency.
 
-import { enableStubTracking, stubSnapshot } from "@cloudflare/computer-rpc/debug";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
+import { enableStubTracking, stubSnapshot } from "@vibe-box/computer-rpc/debug";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import type { BackendHandle, WorkspaceBackend } from "./backend.js";
@@ -30,9 +30,9 @@ import {
 import { Workspace } from "./workspace.js";
 
 function composite(
-  sync: import("@cloudflare/computer-rpc").SyncRPC,
-  shell?: Partial<import("@cloudflare/computer-rpc").ShellRPC>,
-): import("@cloudflare/computer-rpc").WorkspaceRPC {
+  sync: import("@vibe-box/computer-rpc").SyncRPC,
+  shell?: Partial<import("@vibe-box/computer-rpc").ShellRPC>,
+): import("@vibe-box/computer-rpc").WorkspaceRPC {
   const notWired = () => Promise.reject(new Error("not wired in this test"));
   return {
     sync,
@@ -46,7 +46,7 @@ function composite(
   };
 }
 
-function fakeSync(): import("@cloudflare/computer-rpc").SyncRPC {
+function fakeSync(): import("@vibe-box/computer-rpc").SyncRPC {
   return {
     async push() {
       return { rev: 0, appliedPushCursor: { rev: 0, path: null } };
@@ -55,7 +55,7 @@ function fakeSync(): import("@cloudflare/computer-rpc").SyncRPC {
       return {
         currentCursor: { rev: 0, path: null },
         appliedPushCursor: { rev: 0, path: null },
-        stream: new ReadableStream<import("@cloudflare/dofs").ChangeEntry>({
+        stream: new ReadableStream<import("@vibe-box/dofs").ChangeEntry>({
           start(c) {
             c.close();
           },
@@ -84,13 +84,13 @@ function fakeSync(): import("@cloudflare/computer-rpc").SyncRPC {
   };
 }
 
-function backend(rpc?: Partial<import("@cloudflare/computer-rpc").WorkspaceRPC>): WorkspaceBackend {
+function backend(rpc?: Partial<import("@vibe-box/computer-rpc").WorkspaceRPC>): WorkspaceBackend {
   return {
     id: "test",
     type: "test",
     async connect(): Promise<BackendHandle> {
       const sync = rpc?.sync ?? fakeSync();
-      const shell = rpc?.shell as Partial<import("@cloudflare/computer-rpc").ShellRPC> | undefined;
+      const shell = rpc?.shell as Partial<import("@vibe-box/computer-rpc").ShellRPC> | undefined;
       return { rpc: composite(sync, shell), close: async () => {} };
     },
   };
@@ -241,7 +241,7 @@ describe("WorkspaceStub", () => {
         );
       },
     };
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         expect(materialized).toBe(true);
         return {
@@ -273,7 +273,7 @@ describe("WorkspaceStub", () => {
   });
 
   it("runtime.exec rejects when a backend ignores the requested id", async () => {
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         return {
           id: "other-id",
@@ -310,7 +310,7 @@ describe("WorkspaceStub", () => {
     let signalClosed!: () => void;
     let connectCount = 0;
     let execCalls = 0;
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         execCalls += 1;
         return {
@@ -478,7 +478,7 @@ describe("WorkspaceStub", () => {
     // a clock, but we can pin that the returned handle is the right
     // shape and that result() resolves.
     let execCalls = 0;
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         execCalls += 1;
         return {
@@ -517,7 +517,7 @@ describe("WorkspaceStub", () => {
     // for the wire. Decoding it back yields the original events,
     // including a binary stdout chunk carried base64.
     const payload = new Uint8Array([0x00, 0xff, 0x41]);
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         return {
           id: "e-1",
@@ -566,7 +566,7 @@ describe("WorkspaceStub", () => {
 
   it("runtime.exec handle.stream() waits for the wire consumer to pull", async () => {
     let pulls = 0;
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         return {
           id: "e-1",
@@ -615,7 +615,7 @@ describe("WorkspaceStub", () => {
   });
 
   it("runtime.exec handle rejects result() after stream() has claimed it", async () => {
-    const shellRpc: import("@cloudflare/computer-rpc").ShellRPC = {
+    const shellRpc: import("@vibe-box/computer-rpc").ShellRPC = {
       async exec() {
         return {
           id: "e-1",

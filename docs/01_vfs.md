@@ -15,8 +15,8 @@ lives under `/workspace`, which is the default *container* mount point
 container, not on `WorkspaceOptions`).
 
 ```ts
-import { Workspace } from "@cloudflare/computer";
-import { CloudflareContainerBackend } from "@cloudflare/computer/backends/container";
+import { Workspace } from "@vibe-box/computer";
+import { CloudflareContainerBackend } from "@vibe-box/computer/backends/container";
 
 new Workspace({
   storage:  ctx.storage,

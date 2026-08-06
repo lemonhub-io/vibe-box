@@ -17,7 +17,7 @@
 //
 // Output is a set of tables plus a single-line JSON blob so before/
 // after deltas are easy to capture and diff. Run with:
-//   npm run bench --workspace @cloudflare/dofs
+//   npm run bench --workspace @vibe-box/dofs
 // (or: npx vitest run --config vitest.config.bench.ts, from the
 // package dir).
 

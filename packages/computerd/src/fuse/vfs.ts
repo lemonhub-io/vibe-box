@@ -1,8 +1,8 @@
-import type { SyncRPC } from "@cloudflare/computer-rpc";
-import { pullOnce, tick } from "@cloudflare/computer-rpc/driver";
-import { Database, initializeSchema, SQLiteWorkspaceProvider } from "@cloudflare/dofs";
-import { SQLiteTestStorage } from "@cloudflare/dofs/testing";
 import { create, type VirtualFileSystem, VirtualProvider } from "@platformatic/vfs";
+import type { SyncRPC } from "@vibe-box/computer-rpc";
+import { pullOnce, tick } from "@vibe-box/computer-rpc/driver";
+import { Database, initializeSchema, SQLiteWorkspaceProvider } from "@vibe-box/dofs";
+import { SQLiteTestStorage } from "@vibe-box/dofs/testing";
 
 export type NodeVirtualFileSystem = VirtualFileSystem;
 

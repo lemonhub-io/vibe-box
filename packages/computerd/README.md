@@ -1,4 +1,4 @@
-# `@cloudflare/computerd`
+# `@vibe-box/computerd`
 
 > [!IMPORTANT]
 > **PREVIEW ONLY** This package is provided as a preview for feedback only.
@@ -10,7 +10,7 @@
 > The specification under [`docs/`](../../docs/README.md) is forward-looking — read it for
 > intent, not as description of the code today.
 
-Computer daemon CLI and FUSE mount package.
+Vibe Box daemon CLI and FUSE mount package.
 
 ## `computerd`
 
@@ -19,7 +19,7 @@ Computer daemon CLI and FUSE mount package.
 The HTTP server listens on the port provided by the `PORT` environment variable, defaulting to `45678`. The FUSE mount point is provided by `MOUNT_POINT`, defaulting to `/workspace`. The backing VFS stores files under the same absolute prefix: VFS `/workspace/repo/a.txt` is visible to container processes as `/workspace/repo/a.txt`, so capnweb reads, shim materialisation, and shell `exec` agree on absolute paths.
 
 ```sh
-PORT=45678 MOUNT_POINT=/tmp/workspace npx -p @cloudflare/computerd computerd
+PORT=45678 MOUNT_POINT=/tmp/workspace npx -p @vibe-box/computerd computerd
 ```
 
 Current endpoints:
@@ -28,18 +28,18 @@ Current endpoints:
 - `GET /__computerd/info` returns JSON with the selected FUSE backend, mount point, and bound port.
 - `GET /__computerd/stats` returns JSON with DOFS table row counts, total inline and blob byte sizes, the orphan-blob subset, and process resident memory. Useful for watching how the store grows under load.
 - `GET /` returns `200 OK` with an empty JSON object: `{}`.
-- `POST /api` is a capnweb HTTP-batch RPC endpoint backed by `@cloudflare/computer-rpc`. Non-POST methods return `405`.
+- `POST /api` is a capnweb HTTP-batch RPC endpoint backed by `@vibe-box/computer-rpc`. Non-POST methods return `405`.
 - `GET /ws` upgrades to a WebSocket carrying the same capnweb RPC surface. This is the container's primary sync carrier.
 
 All other paths and methods return `404`/`405` with a `text/plain` body.
 
 Current filesystem support:
 
-- `@platformatic/vfs` in-memory filesystem provided by `@cloudflare/dofs`'s node provider.
+- `@platformatic/vfs` in-memory filesystem provided by `@vibe-box/dofs`'s node provider.
 - FUSE operation adapter covering the full `fuse-native` operation surface.
 - Unsupported FUSE operations return `ENOSYS` to the kernel; the binding logs a one-shot warning per operation.
 - capnweb RPC over `/api` and `/ws` exposes the workspace database and an `exec` runner to clients.
-- Optional host/DO synchronization: when `UPSTREAM_URL` is set, `computerd` opens a `SyncClient` from `@cloudflare/computer-rpc/client` against that URL and runs the sync loop in the background.
+- Optional host/DO synchronization: when `UPSTREAM_URL` is set, `computerd` opens a `SyncClient` from `@vibe-box/computer-rpc/client` against that URL and runs the sync loop in the background.
 - No on-disk persistence yet — the in-memory VFS is rebuilt on each start, with sync pulling state back from the upstream when configured.
 
 ## FUSE write model
@@ -138,10 +138,10 @@ Caveats. The shim is dev-only:
 Tests live next to the source files and are written in TypeScript. Vitest runs them directly:
 
 ```sh
-npm test --workspace=@cloudflare/computerd
+npm test --workspace=@vibe-box/computerd
 ```
 
-The test command does not build first. Some suites need build output that is not there in a clean checkout: the tests import the sibling `@cloudflare/dofs` and `@cloudflare/computer-rpc` packages from their `dist/` directories, and `src/cli/computerd.test.ts` spawns the bundled CLI at `dist/cli/computerd.cjs`. Run `npm run build` across the workspace before `npm test`, or those tests fail to resolve the imports or exit early with no bundle to spawn.
+The test command does not build first. Some suites need build output that is not there in a clean checkout: the tests import the sibling `@vibe-box/dofs` and `@vibe-box/computer-rpc` packages from their `dist/` directories, and `src/cli/computerd.test.ts` spawns the bundled CLI at `dist/cli/computerd.cjs`. Run `npm run build` across the workspace before `npm test`, or those tests fail to resolve the imports or exit early with no bundle to spawn.
 
 This package requires Node.js 22+ because `@platformatic/vfs` does.
 
@@ -152,7 +152,7 @@ The two real-FUSE suites gate themselves differently. `src/cli/computerd.test.ts
 Standalone binaries are release artifacts, not files published in the npm package:
 
 ```sh
-npm run build:bin --workspace=@cloudflare/computerd
+npm run build:bin --workspace=@vibe-box/computerd
 ```
 
 The binary is produced with Node's Single Executable Application (SEA) feature: `scripts/build-bin.mjs` bundles the CLI with `esbuild`, generates a SEA blob via `node --experimental-sea-config`, downloads the target's Node binary, and injects the blob with `postject`. macOS targets are stripped and re-signed ad-hoc. `fuse-native` prebuilds and `libfuse` are embedded as SEA assets per target.
