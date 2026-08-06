@@ -1,12 +1,11 @@
+import { createServer, type Server } from "node:http";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { createServer, type Server } from "node:http";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-
+import { createProxyServer, createRemoteTools, type RemoteTools } from "./proxy.js";
 import { createMcpServer } from "./server.js";
 import { createFetchHandler } from "./streamable-http.js";
 import type { McpWorkspace } from "./tools.js";
-import { createProxyServer, createRemoteTools, type RemoteTools } from "./proxy.js";
 
 // The same structural workspace the other suites use, plus a runtime so
 // exec registers.
@@ -39,7 +38,8 @@ class StubWorkspace {
     mkdir: async () => {},
     rm: async () => {},
     readdir: async (path: string) => {
-      if (path !== "/workspace") throw Object.assign(new Error("no such directory"), { code: "ENOENT" });
+      if (path !== "/workspace")
+        throw Object.assign(new Error("no such directory"), { code: "ENOENT" });
       return [{ name: "a.txt", isFile: true, isDirectory: false }];
     },
   };
@@ -82,7 +82,10 @@ describe("createRemoteTools", () => {
     const remote = await createRemoteTools({ url });
     const { tools } = await remote.listTools();
     expect(tools.map((t) => t.name).sort()).toEqual(["edit", "exec", "ls", "read", "write"]);
-    const result = await remote.callTool({ name: "write", arguments: { path: "/workspace/a.txt", content: "hi" } });
+    const result = await remote.callTool({
+      name: "write",
+      arguments: { path: "/workspace/a.txt", content: "hi" },
+    });
     expect(result.isError).toBeFalsy();
     await remote.close();
   });

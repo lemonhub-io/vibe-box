@@ -31,7 +31,10 @@ describe("routeMcp", () => {
 
   it("returns 401 without the bearer token", async () => {
     const { env } = makeEnv();
-    const response = await routeMcp(new Request("https://example.com/mcp", { method: "POST" }), env);
+    const response = await routeMcp(
+      new Request("https://example.com/mcp", { method: "POST" }),
+      env,
+    );
     expect(response.status).toBe(401);
   });
 

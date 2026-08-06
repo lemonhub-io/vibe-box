@@ -14,10 +14,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
+import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
 export interface RemoteToolsOptions {
   /** Base URL of the deployed MCP endpoint, e.g. https://x.workers.dev/mcp. */
@@ -30,9 +27,10 @@ export interface RemoteToolsOptions {
 
 export interface RemoteTools {
   listTools(): Promise<{ tools: Array<{ name: string }> }>;
-  callTool(
-    request: { name: string; arguments?: Record<string, unknown> },
-  ): Promise<{ isError?: boolean; content: unknown[] }>;
+  callTool(request: {
+    name: string;
+    arguments?: Record<string, unknown>;
+  }): Promise<{ isError?: boolean; content: unknown[] }>;
   close(): Promise<void>;
 }
 

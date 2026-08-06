@@ -15,7 +15,7 @@
     "@vibe-box/mcp": "*"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.20.2",
+    "@cloudflare/vitest-pool-workers": "^0.16.10",
     "@cloudflare/workers-types": "^4.20260616.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.7",

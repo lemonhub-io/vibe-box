@@ -93,6 +93,9 @@ package-specific status and usage notes.
 - [`packages/computer`](packages/computer/README.md)
   (`@vibe-box/computer`) — the top-level Vibe Box package
   consumed by Durable Objects. Work in progress.
+- [`packages/mcp`](packages/mcp/README.md)
+  (`@vibe-box/mcp`) — MCP server: streamable-HTTP tools on a
+  Durable Object plus a local stdio proxy for any MCP client.
 - [`packages/computer-computerd-linux-x64`](packages/computer-computerd-linux-x64/README.md)
   — private Docker image context for the prebuilt `computerd` linux-x64
   binary. The image, not an npm package, is the release artifact.

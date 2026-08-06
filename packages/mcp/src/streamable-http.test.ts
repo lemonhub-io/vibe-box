@@ -1,10 +1,9 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-
+import { createMcpServer } from "./server.js";
 import { createFetchHandler } from "./streamable-http.js";
 import type { McpWorkspace } from "./tools.js";
-import { createMcpServer } from "./server.js";
 
 class StubWorkspace {
   files = new Map<string, Uint8Array>();
@@ -30,7 +29,8 @@ class StubWorkspace {
     mkdir: async () => {},
     rm: async () => {},
     readdir: async (path: string) => {
-      if (path !== "/workspace") throw Object.assign(new Error("no such directory"), { code: "ENOENT" });
+      if (path !== "/workspace")
+        throw Object.assign(new Error("no such directory"), { code: "ENOENT" });
       return [{ name: "a.txt", isFile: true, isDirectory: false }];
     },
   };
@@ -98,7 +98,10 @@ describe("createFetchHandler", () => {
       arguments: { path: "/workspace/hello.txt", content: "hello" },
     });
     expect(write.isError).toBeFalsy();
-    const read = await client.callTool({ name: "read", arguments: { path: "/workspace/hello.txt" } });
+    const read = await client.callTool({
+      name: "read",
+      arguments: { path: "/workspace/hello.txt" },
+    });
     const textContent = (read.content as Array<{ type: string; text?: string }>)[0].text ?? "";
     expect(textContent).toBe("hello");
   });

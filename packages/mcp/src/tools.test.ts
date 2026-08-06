@@ -51,7 +51,8 @@ class StubWorkspace {
     rm: async () => {},
     readdir: async (path: string) => {
       if (path === "/empty") return [];
-      if (path !== "/workspace") throw Object.assign(new Error("no such directory"), { code: "ENOENT" });
+      if (path !== "/workspace")
+        throw Object.assign(new Error("no such directory"), { code: "ENOENT" });
       return [
         { name: "a.txt", isFile: true, isDirectory: false },
         { name: "sub", isFile: false, isDirectory: true },
@@ -75,7 +76,14 @@ describe("createMcpServer", () => {
     ws.assets = { share: async () => "https://example.invalid/out" };
     const client = await connectClient(ws);
     const { tools } = await client.listTools();
-    expect(tools.map((t) => t.name).sort()).toEqual(["edit", "exec", "ls", "publish", "read", "write"]);
+    expect(tools.map((t) => t.name).sort()).toEqual([
+      "edit",
+      "exec",
+      "ls",
+      "publish",
+      "read",
+      "write",
+    ]);
   });
 
   it("skips publish when the workspace has no assets client", async () => {

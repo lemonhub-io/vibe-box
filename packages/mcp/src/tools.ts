@@ -206,7 +206,9 @@ export function registerTools(server: McpServer, workspace: McpWorkspace): void 
       path: z.string().describe("Absolute workspace path, e.g. /workspace/src/index.ts."),
       oldText: z
         .string()
-        .describe("Exact text to replace. Must be unique in the file, including whitespace and newlines."),
+        .describe(
+          "Exact text to replace. Must be unique in the file, including whitespace and newlines.",
+        ),
       newText: z.string().describe("Replacement text."),
     },
     async ({ path, oldText, newText }) => applyEdit(workspace, path, oldText, newText),

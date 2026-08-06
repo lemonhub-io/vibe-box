@@ -16,9 +16,7 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
  * through `@hono/node-server`) so this code runs unmodified inside
  * workerd.
  */
-export function createFetchHandler(
-  server: McpServer,
-): (request: Request) => Promise<Response> {
+export function createFetchHandler(server: McpServer): (request: Request) => Promise<Response> {
   let transport: WebStandardStreamableHTTPServerTransport | undefined;
 
   return async (request: Request) => {

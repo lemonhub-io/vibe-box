@@ -24,16 +24,13 @@ import { routeMcp } from "./route.js";
 // The mixin owns the Workspace and installs the prototype accessor
 // `getWorkspace` dispatches to. The options callback runs after
 // super(...), so it can read self.ctx / self.env.
-export class MCPDo extends withWorkspace(
-  class extends DurableObject<McpEnv> {},
-  (self) => {
-    const { ctx } = self as unknown as { ctx: DurableObjectState; env: McpEnv };
-    return {
-      storage: ctx.storage as unknown as DurableObjectStorageLike,
-      backends: [],
-    };
-  },
-) {
+export class MCPDo extends withWorkspace(class extends DurableObject<McpEnv> {}, (self) => {
+  const { ctx } = self as unknown as { ctx: DurableObjectState; env: McpEnv };
+  return {
+    storage: ctx.storage as unknown as DurableObjectStorageLike,
+    backends: [],
+  };
+}) {
   async fetch(request: Request): Promise<Response> {
     // getWorkspace returns a WorkspaceClient whose fs/runtime surface
     // satisfies the MCP structural contract.
