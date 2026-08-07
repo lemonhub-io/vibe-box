@@ -10,9 +10,19 @@ export class WorkspacePathError extends Error {
   }
 }
 
-/** Map an absolute workspace path (/workspace/x) to a filesystem path under root. */
+/**
+ * Map an absolute workspace path (/workspace/x) to a filesystem path
+ * under root. The /workspace prefix is the logical workspace root;
+ * anything else resolves inside root, so no path can escape.
+ */
 export function resolveWorkspacePath(root: string, path: string): string {
-  const cleaned = path.replace(/^\/+/, "");
+  let rel = path;
+  if (rel === "/workspace") {
+    rel = "/";
+  } else if (rel.startsWith("/workspace/")) {
+    rel = rel.slice("/workspace".length);
+  }
+  const cleaned = rel.replace(/^\/+/, "");
   const resolved = resolve(join(root, cleaned));
   const rootResolved = resolve(root);
   if (resolved !== rootResolved && !resolved.startsWith(rootResolved + sep)) {
