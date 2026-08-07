@@ -60,6 +60,10 @@ describe("GitRunner", () => {
       const cloneDir = await mkdtemp(join(tmpdir(), "vibe-clone-"));
       try {
         execFileSync("git", ["clone", bare, cloneDir], { stdio: "pipe" });
+        // A clone does not inherit identity config; host-side setup
+        // is a documented prerequisite, so tests provide it.
+        execFileSync("git", ["config", "user.email", "test@example.invalid"], { cwd: cloneDir });
+        execFileSync("git", ["config", "user.name", "Test"], { cwd: cloneDir });
         const cloneRunner = new GitRunner(cloneDir);
         expect(await cloneRunner.log(3)).toContain("add b.txt");
         await writeFile(join(cloneDir, "c.txt"), "y\n");
