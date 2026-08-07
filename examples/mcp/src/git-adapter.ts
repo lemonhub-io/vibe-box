@@ -69,7 +69,10 @@ export function createGitAdapter(options: GitAdapterOptions): McpGitSurface {
       return "(pulled)";
     },
     async clone(opts) {
-      await git.clone({ url: opts.url, dir: opts.dir, headers });
+      // The VFS requires absolute paths; normalize a caller-supplied
+      // relative destination the way git would (repo → /repo).
+      const dir = opts.dir !== undefined && !opts.dir.startsWith("/") ? `/${opts.dir}` : opts.dir;
+      await git.clone({ url: opts.url, dir, headers });
       return `cloned ${opts.url}`;
     },
   };
