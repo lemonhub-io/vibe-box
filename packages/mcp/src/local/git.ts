@@ -79,19 +79,24 @@ export class GitRunner implements McpGitSurface {
 
   // ---- McpGitSurface -------------------------------------------------
 
-  async run(argv: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+  async run(
+    argv: string[],
+    _cwd?: string,
+  ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+    // Local mode: the working tree root is the repository; the cwd
+    // parameter is accepted for interface parity and ignored.
     const { code, stdout, stderr } = await run(this.cwd, argv);
     return { stdout, stderr, exitCode: code ?? 1 };
   }
 
-  async push(opts?: { remote?: string; ref?: string }): Promise<string> {
+  async push(opts?: { remote?: string; ref?: string; cwd?: string }): Promise<string> {
     // -u sets the upstream on first push, so a fresh clone with no
     // tracking branch works; it is a no-op when upstream exists.
     const args = ["push", "-u", opts?.remote ?? "origin", opts?.ref ?? "HEAD"];
     return this.runOrThrow(args, "git push");
   }
 
-  async pull(opts?: { remote?: string; ref?: string }): Promise<string> {
+  async pull(opts?: { remote?: string; ref?: string; cwd?: string }): Promise<string> {
     const args = ["pull", "--ff-only", opts?.remote ?? "origin", ...(opts?.ref ? [opts.ref] : [])];
     return this.runOrThrow(args, "git pull");
   }

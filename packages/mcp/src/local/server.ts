@@ -13,8 +13,8 @@ export interface LocalServerOptions {
 }
 
 /**
- * Build an MCP server over a local Git working tree. All ten tools —
- * the five file/exec tools plus five git tools — run entirely
+ * Build an MCP server over a local Git working tree. Twelve tools —
+ * the five file/exec tools plus seven git tools — run entirely
  * locally; nothing touches a remote. The workspace does not need to
  * be a Git repository: file tools work regardless and auto-commit
  * degrades to a no-op.
