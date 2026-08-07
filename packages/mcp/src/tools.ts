@@ -213,6 +213,20 @@ async function applyEdit(
  * calls. Each returns a note appended to the tool result (empty
  * string for no note). Used by the local server for auto-commit.
  */
+/**
+ * The git surface MCP git tools operate on. One shape for both local
+ * mode (git CLI adapter) and remote mode (isomorphic-git adapter);
+ * network authentication is the adapter's concern and never flows
+ * through MCP arguments.
+ */
+export interface McpGitSurface {
+  /** argv-driven entry, e.g. ["log", "--oneline", "-n", "5"]. */
+  run(argv: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }>;
+  push(opts?: { remote?: string; ref?: string }): Promise<string>;
+  pull(opts?: { remote?: string; ref?: string }): Promise<string>;
+  clone(opts: { url: string; dir?: string }): Promise<string>;
+}
+
 export interface ToolHooks {
   afterWrite?: (path: string) => Promise<string>;
   afterEdit?: (path: string) => Promise<string>;
@@ -228,7 +242,127 @@ async function appendNote(result: McpToolResult, note: string): Promise<McpToolR
   return result;
 }
 
-export function registerTools(server: McpServer, workspace: McpWorkspace, hooks?: ToolHooks): void {
+function registerGitTools(server: McpServer, git: McpGitSurface): void {
+  server.tool(
+    "git",
+    "Run a git command in the workspace. argv[0] is the subcommand, e.g. [\"branch\"], [\"remote\", \"-v\"], [\"show\", \"HEAD\"]. Use the dedicated git_* tools for status, log, commit, push, pull, and clone.",
+    {
+      argv: z
+        .array(z.string())
+        .min(1)
+        .describe("Git subcommand and its arguments, e.g. [\"branch\", \"-a\"]."),
+    },
+    async ({ argv }) => {
+      try {
+        const result = await git.run(argv);
+        const parts = [];
+        if (result.stdout) parts.push(result.stdout);
+        if (result.stderr) parts.push(`stderr: ${result.stderr}`);
+        if (result.exitCode !== 0) parts.push(`exit ${result.exitCode}`);
+        return text(parts.join("\n"));
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
+      }
+    },
+  );
+
+  server.tool("git_status", "Show the working tree status.", {}, async () => {
+    try {
+      const result = await git.run(["status", "--short"]);
+      if (result.exitCode !== 0) {
+        return text(result.stderr.trim() || `git status failed (exit ${result.exitCode})`, true);
+      }
+      return text(result.stdout === "" ? "(clean)" : result.stdout);
+    } catch (err) {
+      return text(err instanceof Error ? err.message : String(err), true);
+    }
+  });
+
+  server.tool(
+    "git_log",
+    "Show recent commits.",
+    { maxCount: z.number().int().positive().optional().describe("Number of commits. Defaults to 10.") },
+    async ({ maxCount }) => {
+      try {
+        const result = await git.run(["log", "--oneline", `-n ${maxCount ?? 10}`]);
+        return text(result.stdout);
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
+      }
+    },
+  );
+
+  server.tool(
+    "git_commit",
+    "Stage all pending changes and commit them with a message.",
+    { message: z.string().describe("Commit message.") },
+    async ({ message }) => {
+      try {
+        await git.run(["add", "-A"]);
+        const result = await git.run(["commit", "-m", message]);
+        return text(result.stdout || result.stderr);
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
+      }
+    },
+  );
+
+  server.tool(
+    "git_push",
+    "Push the current branch to its remote.",
+    {
+      remote: z.string().optional().describe("Remote name or URL. Defaults to origin."),
+      ref: z.string().optional().describe("Ref to push. Defaults to the current branch."),
+    },
+    async ({ remote, ref }) => {
+      try {
+        return text(await git.push({ remote, ref }));
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
+      }
+    },
+  );
+
+  server.tool(
+    "git_pull",
+    "Pull the current branch from its remote.",
+    {
+      remote: z.string().optional().describe("Remote name or URL. Defaults to origin."),
+      ref: z.string().optional().describe("Ref to pull. Defaults to the current branch."),
+    },
+    async ({ remote, ref }) => {
+      try {
+        return text(await git.pull({ remote, ref }));
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
+      }
+    },
+  );
+
+  server.tool(
+    "git_clone",
+    "Clone a repository into the workspace.",
+    {
+      url: z.string().describe("Repository URL, e.g. https://github.com/owner/repo.git."),
+      dir: z.string().optional().describe("Destination directory in the workspace. Defaults to the repo name."),
+    },
+    async ({ url, dir }) => {
+      try {
+        return text(await git.clone({ url, dir }));
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
+      }
+    },
+  );
+}
+
+export function registerTools(
+  server: McpServer,
+  workspace: McpWorkspace,
+  hooks?: ToolHooks,
+  git?: McpGitSurface,
+): void {
+  if (git !== undefined) registerGitTools(server, git);
   server.tool(
     "read",
     "Read a file from the workspace and return its contents as text. Files larger than 1 MiB are truncated with a marker.",
