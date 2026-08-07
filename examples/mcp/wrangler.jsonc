@@ -38,7 +38,9 @@
   // SQLite filesystem.
   "vars": {
     "MCP_WORKSPACE": "default",
-    "MCP_SHELL": "false"
+    "MCP_SHELL": "false",
+    "GIT_IDENTITY_NAME": "vibe-box-agent",
+    "GIT_IDENTITY_EMAIL": "agent@vibe-box.example.invalid"
   },
 
   // Paid plan environment: enables the shell backend so the MCP exec

@@ -245,12 +245,12 @@ async function appendNote(result: McpToolResult, note: string): Promise<McpToolR
 function registerGitTools(server: McpServer, git: McpGitSurface): void {
   server.tool(
     "git",
-    "Run a git command in the workspace. argv[0] is the subcommand, e.g. [\"branch\"], [\"remote\", \"-v\"], [\"show\", \"HEAD\"]. Use the dedicated git_* tools for status, log, commit, push, pull, and clone.",
+    'Run a git command in the workspace. argv[0] is the subcommand, e.g. ["branch"], ["remote", "-v"], ["show", "HEAD"]. Use the dedicated git_* tools for status, log, commit, push, pull, and clone.',
     {
       argv: z
         .array(z.string())
         .min(1)
-        .describe("Git subcommand and its arguments, e.g. [\"branch\", \"-a\"]."),
+        .describe('Git subcommand and its arguments, e.g. ["branch", "-a"].'),
     },
     async ({ argv }) => {
       try {
@@ -281,7 +281,14 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
   server.tool(
     "git_log",
     "Show recent commits.",
-    { maxCount: z.number().int().positive().optional().describe("Number of commits. Defaults to 10.") },
+    {
+      maxCount: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe("Number of commits. Defaults to 10."),
+    },
     async ({ maxCount }) => {
       try {
         const result = await git.run(["log", "--oneline", `-n ${maxCount ?? 10}`]);
@@ -344,7 +351,10 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
     "Clone a repository into the workspace.",
     {
       url: z.string().describe("Repository URL, e.g. https://github.com/owner/repo.git."),
-      dir: z.string().optional().describe("Destination directory in the workspace. Defaults to the repo name."),
+      dir: z
+        .string()
+        .optional()
+        .describe("Destination directory in the workspace. Defaults to the repo name."),
     },
     async ({ url, dir }) => {
       try {
