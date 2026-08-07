@@ -218,12 +218,15 @@ async function applyEdit(
  * mode (git CLI adapter) and remote mode (isomorphic-git adapter);
  * network authentication is the adapter's concern and never flows
  * through MCP arguments.
+ *
+ * `cwd` is an absolute workspace path (e.g. /workspace/repo); local
+ * mode ignores it (the working tree root is the repository).
  */
 export interface McpGitSurface {
   /** argv-driven entry, e.g. ["log", "--oneline", "-n", "5"]. */
-  run(argv: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }>;
-  push(opts?: { remote?: string; ref?: string }): Promise<string>;
-  pull(opts?: { remote?: string; ref?: string }): Promise<string>;
+  run(argv: string[], cwd?: string): Promise<{ stdout: string; stderr: string; exitCode: number }>;
+  push(opts?: { remote?: string; ref?: string; cwd?: string }): Promise<string>;
+  pull(opts?: { remote?: string; ref?: string; cwd?: string }): Promise<string>;
   clone(opts: { url: string; dir?: string }): Promise<string>;
 }
 
@@ -251,10 +254,16 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
         .array(z.string())
         .min(1)
         .describe('Git subcommand and its arguments, e.g. ["branch", "-a"].'),
+      cwd: z
+        .string()
+        .optional()
+        .describe(
+          "Repository directory in the workspace, e.g. /workspace/repo. Defaults to the workspace root.",
+        ),
     },
-    async ({ argv }) => {
+    async ({ argv, cwd }) => {
       try {
-        const result = await git.run(argv);
+        const result = await git.run(argv, cwd);
         const parts = [];
         if (result.stdout) parts.push(result.stdout);
         if (result.stderr) parts.push(`stderr: ${result.stderr}`);
@@ -266,17 +275,29 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
     },
   );
 
-  server.tool("git_status", "Show the working tree status.", {}, async () => {
-    try {
-      const result = await git.run(["status", "--short"]);
-      if (result.exitCode !== 0) {
-        return text(result.stderr.trim() || `git status failed (exit ${result.exitCode})`, true);
+  server.tool(
+    "git_status",
+    "Show the working tree status.",
+    {
+      cwd: z
+        .string()
+        .optional()
+        .describe(
+          "Repository directory in the workspace, e.g. /workspace/repo. Defaults to the workspace root.",
+        ),
+    },
+    async ({ cwd }) => {
+      try {
+        const result = await git.run(["status", "--short"], cwd);
+        if (result.exitCode !== 0) {
+          return text(result.stderr.trim() || `git status failed (exit ${result.exitCode})`, true);
+        }
+        return text(result.stdout === "" ? "(clean)" : result.stdout);
+      } catch (err) {
+        return text(err instanceof Error ? err.message : String(err), true);
       }
-      return text(result.stdout === "" ? "(clean)" : result.stdout);
-    } catch (err) {
-      return text(err instanceof Error ? err.message : String(err), true);
-    }
-  });
+    },
+  );
 
   server.tool(
     "git_log",
@@ -288,10 +309,16 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
         .positive()
         .optional()
         .describe("Number of commits. Defaults to 10."),
+      cwd: z
+        .string()
+        .optional()
+        .describe(
+          "Repository directory in the workspace, e.g. /workspace/repo. Defaults to the workspace root.",
+        ),
     },
-    async ({ maxCount }) => {
+    async ({ maxCount, cwd }) => {
       try {
-        const result = await git.run(["log", "--oneline", `-n ${maxCount ?? 10}`]);
+        const result = await git.run(["log", "--oneline", `-n ${maxCount ?? 10}`], cwd);
         return text(result.stdout);
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
@@ -302,11 +329,19 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
   server.tool(
     "git_commit",
     "Stage all pending changes and commit them with a message.",
-    { message: z.string().describe("Commit message.") },
-    async ({ message }) => {
+    {
+      message: z.string().describe("Commit message."),
+      cwd: z
+        .string()
+        .optional()
+        .describe(
+          "Repository directory in the workspace, e.g. /workspace/repo. Defaults to the workspace root.",
+        ),
+    },
+    async ({ message, cwd }) => {
       try {
-        await git.run(["add", "-A"]);
-        const result = await git.run(["commit", "-m", message]);
+        await git.run(["add", "-A"], cwd);
+        const result = await git.run(["commit", "-m", message], cwd);
         return text(result.stdout || result.stderr);
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
@@ -320,10 +355,16 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
     {
       remote: z.string().optional().describe("Remote name or URL. Defaults to origin."),
       ref: z.string().optional().describe("Ref to push. Defaults to the current branch."),
+      cwd: z
+        .string()
+        .optional()
+        .describe(
+          "Repository directory in the workspace, e.g. /workspace/repo. Defaults to the workspace root.",
+        ),
     },
-    async ({ remote, ref }) => {
+    async ({ remote, ref, cwd }) => {
       try {
-        return text(await git.push({ remote, ref }));
+        return text(await git.push({ remote, ref, cwd }));
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
       }
@@ -336,10 +377,16 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
     {
       remote: z.string().optional().describe("Remote name or URL. Defaults to origin."),
       ref: z.string().optional().describe("Ref to pull. Defaults to the current branch."),
+      cwd: z
+        .string()
+        .optional()
+        .describe(
+          "Repository directory in the workspace, e.g. /workspace/repo. Defaults to the workspace root.",
+        ),
     },
-    async ({ remote, ref }) => {
+    async ({ remote, ref, cwd }) => {
       try {
-        return text(await git.pull({ remote, ref }));
+        return text(await git.pull({ remote, ref, cwd }));
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
       }
@@ -354,7 +401,9 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
       dir: z
         .string()
         .optional()
-        .describe("Destination directory in the workspace. Defaults to the repo name."),
+        .describe(
+          "Destination directory in the workspace. Defaults to the workspace root, making the workspace itself the repository.",
+        ),
     },
     async ({ url, dir }) => {
       try {

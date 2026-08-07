@@ -17,12 +17,14 @@ export interface GitAdapterOptions {
     push(options?: {
       remote?: string;
       ref?: string;
+      dir?: string;
       force?: boolean;
       headers?: Record<string, string>;
     }): Promise<{ ok: boolean; error?: string }>;
     pull(options?: {
       remote?: string;
       ref?: string;
+      dir?: string;
       headers?: Record<string, string>;
     }): Promise<void>;
     clone(options: { url: string; dir?: string; headers?: Record<string, string> }): Promise<void>;
@@ -47,19 +49,23 @@ export function createGitAdapter(options: GitAdapterOptions): McpGitSurface {
       : {};
 
   return {
-    async run(argv) {
-      const result = await git.cli({ argv, env: identityEnv });
-      return { stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode };
+    run(argv: string[], cwd?: string) {
+      return git.cli({ argv, env: identityEnv, cwd });
     },
     async push(opts) {
-      const result = await git.push({ remote: opts?.remote, ref: opts?.ref, headers });
+      const result = await git.push({
+        remote: opts?.remote,
+        ref: opts?.ref,
+        dir: opts?.cwd,
+        headers,
+      });
       if (!result.ok) {
         throw new Error(result.error ?? "push rejected");
       }
       return "(pushed)";
     },
     async pull(opts) {
-      await git.pull({ remote: opts?.remote, ref: opts?.ref, headers });
+      await git.pull({ remote: opts?.remote, ref: opts?.ref, dir: opts?.cwd, headers });
       return "(pulled)";
     },
     async clone(opts) {
