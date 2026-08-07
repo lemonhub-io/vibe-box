@@ -61,7 +61,7 @@ describe("createFetchHandler", () => {
 
   beforeEach(async () => {
     const ws: McpWorkspace = new StubWorkspace();
-    handler = createFetchHandler(createMcpServer(ws));
+    handler = createFetchHandler(() => createMcpServer(ws));
     client = new Client({ name: "test", version: "0.0.0" }, { capabilities: {} });
   });
 

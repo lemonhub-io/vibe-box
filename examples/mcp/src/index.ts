@@ -45,20 +45,20 @@ export class MCPDo extends withWorkspace(class extends DurableObject<McpEnv> {},
     ],
   };
 }) {
-  // The MCP handler owns the transport and its sessions; it must
-  // outlive a single fetch so a client's initialize / tools / call
-  // sequence lands on the same session. Durable Object instances are
-  // long-lived per workspace, so this caches across requests.
-  private handler?: (request: Request) => Promise<Response>;
+  // The workspace handle is fetched once and cached; the MCP handler
+  // itself is rebuilt per request because the stateless transport
+  // must not be reused (and DO instances can be evicted between
+  // requests, which would orphan any in-memory session state).
+  private workspace?: McpWorkspace;
 
   async fetch(request: Request): Promise<Response> {
-    if (this.handler === undefined) {
+    if (this.workspace === undefined) {
       // getWorkspace returns a WorkspaceClient whose fs/runtime
       // surface satisfies the MCP structural contract.
-      const ws = (await getWorkspace(this)) as unknown as McpWorkspace;
-      this.handler = createFetchHandler(createMcpServer(ws));
+      this.workspace = (await getWorkspace(this)) as unknown as McpWorkspace;
     }
-    return this.handler(request);
+    const handler = createFetchHandler(() => createMcpServer(this.workspace!));
+    return handler(request);
   }
 }
 
