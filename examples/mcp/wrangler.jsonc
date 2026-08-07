@@ -3,20 +3,18 @@
   // MCP protocol. The DO holds the authoritative SQLite filesystem;
   // the /mcp route speaks MCP streamable HTTP, gated by a bearer
   // token.
+  //
+  // The base configuration runs on the Workers Free plan: filesystem
+  // tools only (read, ls, write, edit). The exec tool needs the shell
+  // backend, which requires Dynamic Workers on the Workers Paid plan;
+  // deploy that with the `paid` environment (wrangler deploy --env
+  // paid), which adds the worker_loaders binding and turns the shell
+  // on via MCP_SHELL.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vibe-box-mcp-example",
   "main": "src/index.ts",
   "compatibility_date": "2026-05-26",
   "compatibility_flags": ["nodejs_compat", "experimental"],
-
-  // Worker Loader binding. The DO calls env.LOADER.get(id, ...) to
-  // mint a Dynamic Worker that WorkerShellBackend dispatches
-  // shell.exec into; that is the runtime behind the MCP `exec` tool.
-  "worker_loaders": [
-    {
-      "binding": "LOADER"
-    }
-  ],
 
   "durable_objects": {
     "bindings": [
@@ -39,7 +37,25 @@
   // distinct name is a separate, isolated Durable Object with its own
   // SQLite filesystem.
   "vars": {
-    "MCP_WORKSPACE": "default"
+    "MCP_WORKSPACE": "default",
+    "MCP_SHELL": "false"
+  },
+
+  // Paid plan environment: enables the shell backend so the MCP exec
+  // tool dispatches real commands into a Dynamic Worker (just-bash
+  // through the Worker Loader). Deploy with:
+  //   wrangler deploy --env paid
+  "env": {
+    "paid": {
+      "worker_loaders": [
+        {
+          "binding": "LOADER"
+        }
+      ],
+      "vars": {
+        "MCP_SHELL": "true"
+      }
+    }
   }
 
   // MCP_TOKEN is a secret, set before deploy:
