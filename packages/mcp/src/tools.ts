@@ -138,6 +138,27 @@ async function readCapped(
   return text(decode(bytes));
 }
 
+function parentDir(path: string): string {
+  const index = path.lastIndexOf("/");
+  if (index <= 0) return "/";
+  return path.slice(0, index);
+}
+
+/** Write a file, creating parent directories so a fresh workspace works. */
+async function writeFileEnsuringParents(
+  ws: McpWorkspace,
+  path: string,
+  content: Uint8Array,
+): Promise<void> {
+  const parent = parentDir(path);
+  if (parent !== "/") {
+    await ws.fs.mkdir(parent, { recursive: true }).catch((err: unknown) => {
+      if ((err as { code?: string }).code !== "EEXIST") throw err;
+    });
+  }
+  await ws.fs.writeFile(path, content);
+}
+
 /**
  * Apply one exact replacement to a file, matching the AI edit tool's
  * contract: oldText must occur exactly once in the original content.
@@ -238,7 +259,7 @@ export function registerTools(server: McpServer, workspace: McpWorkspace): void 
     },
     async ({ path, content }) => {
       try {
-        await workspace.fs.writeFile(path, encode(content));
+        await writeFileEnsuringParents(workspace, path, encode(content));
         return text(`Wrote ${path} (${encode(content).byteLength} bytes).`);
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
