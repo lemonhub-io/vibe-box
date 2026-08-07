@@ -318,7 +318,7 @@ function registerGitTools(server: McpServer, git: McpGitSurface): void {
     },
     async ({ maxCount, cwd }) => {
       try {
-        const result = await git.run(["log", "--oneline", `-n ${maxCount ?? 10}`], cwd);
+        const result = await git.run(["log", "--oneline", "-n", String(maxCount ?? 10)], cwd);
         return text(result.stdout);
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
