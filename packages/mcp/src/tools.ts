@@ -208,7 +208,27 @@ async function applyEdit(
   return text(`Edited ${path} (1 replacement).`);
 }
 
-export function registerTools(server: McpServer, workspace: McpWorkspace): void {
+/**
+ * Optional lifecycle hooks invoked after successful mutating tool
+ * calls. Each returns a note appended to the tool result (empty
+ * string for no note). Used by the local server for auto-commit.
+ */
+export interface ToolHooks {
+  afterWrite?: (path: string) => Promise<string>;
+  afterEdit?: (path: string) => Promise<string>;
+  afterExec?: (command: string, exitCode: number) => Promise<string>;
+}
+
+async function appendNote(result: McpToolResult, note: string): Promise<McpToolResult> {
+  if (note.length === 0) return result;
+  const first = result.content[0];
+  if (first !== undefined && first.type === "text") {
+    first.text += `\n${note}`;
+  }
+  return result;
+}
+
+export function registerTools(server: McpServer, workspace: McpWorkspace, hooks?: ToolHooks): void {
   server.tool(
     "read",
     "Read a file from the workspace and return its contents as text. Files larger than 1 MiB are truncated with a marker.",
@@ -260,7 +280,8 @@ export function registerTools(server: McpServer, workspace: McpWorkspace): void 
     async ({ path, content }) => {
       try {
         await writeFileEnsuringParents(workspace, path, encode(content));
-        return text(`Wrote ${path} (${encode(content).byteLength} bytes).`);
+        const note = (await hooks?.afterWrite?.(path)) ?? "";
+        return appendNote(text(`Wrote ${path} (${encode(content).byteLength} bytes).`), note);
       } catch (err) {
         return text(err instanceof Error ? err.message : String(err), true);
       }
@@ -279,7 +300,14 @@ export function registerTools(server: McpServer, workspace: McpWorkspace): void 
         ),
       newText: z.string().describe("Replacement text."),
     },
-    async ({ path, oldText, newText }) => applyEdit(workspace, path, oldText, newText),
+    async ({ path, oldText, newText }) => {
+      const result = await applyEdit(workspace, path, oldText, newText);
+      if (!result.isError) {
+        const note = (await hooks?.afterEdit?.(path)) ?? "";
+        return appendNote(result, note);
+      }
+      return result;
+    },
   );
 
   if (workspace.runtime !== undefined) {
@@ -307,7 +335,8 @@ export function registerTools(server: McpServer, workspace: McpWorkspace): void 
           const parts = [`exit ${result.exitCode}`];
           if (result.stdout) parts.push(result.stdout);
           if (result.stderr) parts.push(`stderr: ${result.stderr}`);
-          return text(parts.join("\n"));
+          const note = (await hooks?.afterExec?.(command, result.exitCode)) ?? "";
+          return appendNote(text(parts.join("\n")), note);
         } catch (err) {
           return text(err instanceof Error ? err.message : String(err), true);
         }
