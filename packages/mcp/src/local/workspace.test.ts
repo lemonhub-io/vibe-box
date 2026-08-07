@@ -21,9 +21,9 @@ describe("LocalWorkspace", () => {
       await ws.fs.writeFile("/workspace/a.txt", new TextEncoder().encode("hello"));
       await ws.fs.mkdir("/workspace/sub", { recursive: true });
       await ws.fs.writeFile("/workspace/sub/b.txt", new TextEncoder().encode("world"));
-      expect(
-        new TextDecoder().decode(await drain(await ws.fs.readFile("/workspace/a.txt"))),
-      ).toBe("hello");
+      expect(new TextDecoder().decode(await drain(await ws.fs.readFile("/workspace/a.txt")))).toBe(
+        "hello",
+      );
       const entries = await ws.fs.readdir("/workspace");
       expect(entries.map((e) => e.name).sort()).toEqual(["a.txt", "sub"]);
       const stat = await ws.fs.stat("/workspace/a.txt");

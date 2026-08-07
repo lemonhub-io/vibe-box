@@ -108,7 +108,14 @@ export function createLocalServer(options: LocalServerOptions): McpServer {
   server.tool(
     "git_log",
     "Show recent commits.",
-    { maxCount: z.number().int().positive().optional().describe("Number of commits. Defaults to 10.") },
+    {
+      maxCount: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe("Number of commits. Defaults to 10."),
+    },
     async ({ maxCount }) => {
       try {
         const out = await git.log(maxCount);

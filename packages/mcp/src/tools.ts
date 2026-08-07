@@ -228,11 +228,7 @@ async function appendNote(result: McpToolResult, note: string): Promise<McpToolR
   return result;
 }
 
-export function registerTools(
-  server: McpServer,
-  workspace: McpWorkspace,
-  hooks?: ToolHooks,
-): void {
+export function registerTools(server: McpServer, workspace: McpWorkspace, hooks?: ToolHooks): void {
   server.tool(
     "read",
     "Read a file from the workspace and return its contents as text. Files larger than 1 MiB are truncated with a marker.",
