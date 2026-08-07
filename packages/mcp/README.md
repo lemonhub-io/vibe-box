@@ -33,10 +33,16 @@ Remote:  MCP client ──► vibe-mcp-server (stdio) ──► Worker /mcp (str
 | `edit` | Apply one exact replacement |
 | `exec` | Run a shell command through the workspace runtime (only when the workspace has one) |
 | `publish` | Publish an artifact through the assets client (only when present) |
+| `git` | Run an arbitrary git subcommand (argv) |
+| `git_status` | Working tree status |
+| `git_log` | Recent commits |
+| `git_commit` | Stage all and commit with a message |
+| `git_push` | Push the current branch to its remote |
+| `git_pull` | Pull the current branch from its remote |
+| `git_clone` | Clone a repository into the workspace |
 
-Local mode additionally registers five git tools (`git_status`,
-`git_commit`, `git_push`, `git_pull`, `git_log`) and never exposes
-`publish`.
+Local mode always registers the seven git tools. Remote mode
+registers them when the workspace has git enabled (see below).
 
 ## Local mode
 
@@ -118,3 +124,26 @@ Register the command as an MCP stdio server in your client's config:
 npm test --workspace @vibe-box/mcp
 npm run typecheck --workspace @vibe-box/mcp
 ```
+
+## Remote git
+
+The deployed worker exposes the same seven git tools when the
+workspace is built with git enabled (the example worker does). Git
+runs inside the Durable Object over the SQLite filesystem via
+isomorphic-git, so a filesystem-only workspace can clone, commit,
+push, and pull — no exec backend required.
+
+Auth for private remotes is injected server-side from worker
+secrets, never through MCP arguments:
+
+```sh
+wrangler secret put GIT_TOKEN          # bearer token for git push/pull/clone
+```
+
+Identity for commits comes from the `GIT_IDENTITY_NAME` and
+`GIT_IDENTITY_EMAIL` vars (sensible defaults are set in the example
+worker's wrangler config). Public remotes need no token.
+
+End-to-end: an online agent clones a repo into the remote workspace,
+writes code, and commits; a local machine pulls the same history and
+keeps developing.

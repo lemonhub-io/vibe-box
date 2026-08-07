@@ -9,4 +9,9 @@ export {
 export { runProxy } from "./proxy-run.js";
 export { createMcpServer, type McpWorkspace } from "./server.js";
 export { createFetchHandler } from "./streamable-http.js";
-export { type McpWorkspace as ToolsWorkspace, registerTools, type ToolHooks } from "./tools.js";
+export {
+  type McpGitSurface,
+  type McpWorkspace as ToolsWorkspace,
+  registerTools,
+  type ToolHooks,
+} from "./tools.js";

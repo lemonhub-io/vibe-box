@@ -11,6 +11,11 @@ export interface McpEnv {
   MCP_SHELL?: string;
   MCP_DO: DurableObjectNamespace;
   LOADER?: WorkerLoader;
+  /** Optional bearer token for git push/pull/clone to private remotes. */
+  GIT_TOKEN?: string;
+  /** Git identity for commit-producing operations. */
+  GIT_IDENTITY_NAME?: string;
+  GIT_IDENTITY_EMAIL?: string;
 }
 
 /** Workspace names are DO ids; keep them tame. */

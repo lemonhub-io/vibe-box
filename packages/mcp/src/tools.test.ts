@@ -107,6 +107,57 @@ describe("createMcpServer", () => {
     expect(tools.map((t) => t.name).sort()).toEqual(["edit", "exec", "ls", "read", "write"]);
   });
 
+  it("registers the git tools when a git surface is present", async () => {
+    const calls: string[][] = [];
+    const git = {
+      async run(argv: string[]) {
+        calls.push(argv);
+        return { stdout: "ok", stderr: "", exitCode: 0 };
+      },
+      async push() {
+        return "pushed";
+      },
+      async pull() {
+        return "pulled";
+      },
+      async clone() {
+        return "cloned";
+      },
+    };
+    const server = createMcpServer(new StubWorkspace());
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    await server.connect(serverTransport);
+    // createMcpServer does not take a git surface; register directly
+    // through the shared registration path the local server uses.
+    const { registerTools } = await import("./tools.js");
+    const extra = new (await import("@modelcontextprotocol/sdk/server/mcp.js")).McpServer({
+      name: "git-test",
+      version: "0.0.0",
+    });
+    registerTools(extra, new StubWorkspace(), undefined, git);
+    const [ct2, st2] = InMemoryTransport.createLinkedPair();
+    await extra.connect(st2);
+    const client = new Client({ name: "test", version: "0.0.0" }, { capabilities: {} });
+    await client.connect(ct2);
+    const { tools } = await client.listTools();
+    expect(tools.map((t) => t.name).sort()).toEqual([
+      "edit",
+      "exec",
+      "git",
+      "git_clone",
+      "git_commit",
+      "git_log",
+      "git_pull",
+      "git_push",
+      "git_status",
+      "ls",
+      "read",
+      "write",
+    ]);
+    const status = await client.callTool({ name: "git_status", arguments: {} });
+    expect(calls).toContainEqual(["status", "--short"]);
+  });
+
   it("writes then reads a file through the workspace fs", async () => {
     const ws = new StubWorkspace();
     const client = await connectClient(ws);

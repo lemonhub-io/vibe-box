@@ -36,7 +36,7 @@ async function toolText(
 }
 
 describe("createLocalServer", () => {
-  it("registers the ten tools", async () => {
+  it("registers the twelve tools", async () => {
     const root = await makeRepo();
     try {
       const client = await connect(root);
@@ -44,6 +44,8 @@ describe("createLocalServer", () => {
       expect(tools.map((t) => t.name).sort()).toEqual([
         "edit",
         "exec",
+        "git",
+        "git_clone",
         "git_commit",
         "git_log",
         "git_pull",

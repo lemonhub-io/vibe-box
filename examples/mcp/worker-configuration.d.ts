@@ -7,4 +7,7 @@ interface Env {
   MCP_WORKSPACE: string;
   MCP_TOKEN: string;
   LOADER?: WorkerLoader;
+  GIT_TOKEN?: string;
+  GIT_IDENTITY_NAME?: string;
+  GIT_IDENTITY_EMAIL?: string;
 }
