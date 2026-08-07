@@ -52,7 +52,7 @@ describe("createRemoteTools", () => {
   beforeEach(async () => {
     // Host a real streamable-HTTP MCP endpoint over node:http, the way
     // a deployed worker would present it.
-    const handler = createFetchHandler(createMcpServer(new StubWorkspace()));
+    const handler = createFetchHandler(() => createMcpServer(new StubWorkspace()));
     http = createServer((req, res) => {
       const chunks: Buffer[] = [];
       req.on("data", (c) => chunks.push(c));

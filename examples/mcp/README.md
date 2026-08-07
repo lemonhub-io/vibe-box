@@ -4,9 +4,10 @@ Example Worker + Durable Object exposing a `@vibe-box/computer`
 Workspace through the [MCP](https://modelcontextprotocol.io)
 protocol.
 
-The DO owns one Workspace (filesystem only, no execution backend) and
-answers MCP streamable-HTTP requests on the top-level worker's `/mcp`
-route. Access is gated by a bearer token: every request must carry
+The DO owns one Workspace whose shell runs in a Dynamic Worker
+(just-bash through the Worker Loader), and answers MCP streamable-HTTP
+requests on the top-level worker's `/mcp` route. Access is gated by a
+bearer token: every request must carry
 `Authorization: Bearer <MCP_TOKEN>`.
 
 ```
@@ -40,8 +41,8 @@ npx @vibe-box/mcp \
 Point your MCP client (Claude Code, opencode, Cursor, ...) at the
 `vibe-mcp-server` command. The proxy forwards `tools/list` and
 `tools/call` to the workspace; the client sees the six tools
-`read`, `ls`, `write`, `edit`, `exec`, `publish` (the last two only
-when the workspace is configured with a runtime or assets client).
+`read`, `ls`, `write`, `edit`, `exec`, `publish` (the last one only
+when the workspace has an assets client).
 
 ## Workspaces
 

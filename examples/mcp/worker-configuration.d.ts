@@ -6,4 +6,5 @@ interface Env {
   MCP_DO: DurableObjectNamespace<import("./src/index.js").MCPDo>;
   MCP_WORKSPACE: string;
   MCP_TOKEN: string;
+  LOADER: WorkerLoader;
 }
