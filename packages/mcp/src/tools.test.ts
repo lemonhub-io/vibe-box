@@ -9,6 +9,7 @@ import { createMcpServer } from "./server.js";
 // MCP tools operate on. Writes land in a Map; reads come back from it.
 class StubWorkspace {
   files = new Map<string, Uint8Array>();
+  mkdirs: string[] = [];
   resolveHang?: () => void;
   assets?: { share(path: string, options: { expiresAfter: number }): Promise<string> };
   runtime = {
@@ -59,7 +60,9 @@ class StubWorkspace {
     writeFile: async (path: string, content: Uint8Array) => {
       this.files.set(path, content);
     },
-    mkdir: async () => {},
+    mkdir: async (path: string) => {
+      this.mkdirs.push(path);
+    },
     rm: async () => {},
     readdir: async (path: string) => {
       if (path === "/empty") return [];
@@ -118,6 +121,17 @@ describe("createMcpServer", () => {
     });
     const text = (read.content as Array<{ type: string; text?: string }>)[0].text ?? "";
     expect(text).toContain("hello world");
+  });
+
+  it("creates missing parent directories on write", async () => {
+    const ws = new StubWorkspace();
+    const client = await connectClient(ws);
+    const write = await client.callTool({
+      name: "write",
+      arguments: { path: "/workspace/a/b/c.txt", content: "deep" },
+    });
+    expect(write.isError).toBeFalsy();
+    expect(ws.mkdirs).toContain("/workspace/a/b");
   });
 
   it("lists a directory", async () => {
