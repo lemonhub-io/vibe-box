@@ -28,21 +28,27 @@ import { routeMcp } from "./route.js";
 
 // The mixin owns the Workspace and installs the prototype accessor
 // `getWorkspace` dispatches to. The options callback runs after
-// super(...), so it can read self.ctx / self.env. The shell backend
-// dispatches every runtime.exec into a Dynamic Worker loaded through
-// env.LOADER — that is what makes the MCP `exec` tool able to run
-// real commands.
+// super(...), so it can read self.ctx / self.env. The shell backend —
+// which dispatches runtime.exec into a Dynamic Worker loaded through
+// env.LOADER, powering the MCP `exec` tool — is gated behind
+// env.MCP_SHELL: Dynamic Workers need the Workers Paid plan, so the
+// default (Free) configuration deploys without a shell and the exec
+// tool does not register.
 export class MCPDo extends withWorkspace(class extends DurableObject<McpEnv> {}, (self) => {
   const { ctx, env } = self as unknown as { ctx: DurableObjectState; env: McpEnv };
-  return {
-    storage: ctx.storage as unknown as DurableObjectStorageLike,
-    backends: [
+  const backends = [];
+  if (env.MCP_SHELL === "true") {
+    backends.push(
       new WorkerShellBackend({
         loader: env.LOADER,
         workspace: { binding: "MCP_DO", id: ctx.id.toString() },
         ctx,
       }),
-    ],
+    );
+  }
+  return {
+    storage: ctx.storage as unknown as DurableObjectStorageLike,
+    backends,
   };
 }) {
   // The workspace handle is fetched once and cached; the MCP handler

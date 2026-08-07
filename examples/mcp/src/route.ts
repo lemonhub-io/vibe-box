@@ -8,8 +8,9 @@
 export interface McpEnv {
   MCP_TOKEN: string;
   MCP_WORKSPACE: string;
+  MCP_SHELL?: string;
   MCP_DO: DurableObjectNamespace;
-  LOADER: WorkerLoader;
+  LOADER?: WorkerLoader;
 }
 
 /** Workspace names are DO ids; keep them tame. */
