@@ -25,7 +25,7 @@ npm run deploy --workspace @example/vibe-mcp
 wrangler secret put MCP_TOKEN --remote   # from examples/mcp
 ```
 
-The worker is reachable at `https://vibe-box-mcp-example.<account>.workers.dev/mcp`.
+The worker is reachable at `https://mcp.openos.channel/mcp`.
 
 ## Connect an agent
 
@@ -33,7 +33,7 @@ Run the local stdio proxy (from `@vibe-box/mcp`):
 
 ```sh
 npx @vibe-box/mcp \
-  --url https://vibe-box-mcp-example.<account>.workers.dev/mcp \
+  --url https://mcp.openos.channel/mcp \
   --token <MCP_TOKEN> \
   --workspace default
 ```

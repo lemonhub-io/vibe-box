@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 20
     environment:
       name: mcp-worker
-      url: https://vibe-box-mcp-example.${{ vars.CF_WORKERS_SUBDOMAIN }}.workers.dev/mcp
+      url: https://mcp.openos.channel/mcp
     steps:
       - uses: actions/checkout@v6
         with:
